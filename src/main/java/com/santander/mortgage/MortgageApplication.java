@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan("com.santander")
-
 public class MortgageApplication {
 
 	public static void main(String[] args) {

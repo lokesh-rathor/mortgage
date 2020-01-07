@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.santander.mortgage.model.PropertyDetails;
 
 @Repository
-public interface MortgageRepository extends JpaRepository<PropertyDetails, Long> {
+public interface PropertyDetailsRepository extends JpaRepository<PropertyDetails, Long>{
+
 
 }
