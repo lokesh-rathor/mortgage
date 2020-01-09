@@ -1,19 +1,17 @@
 package com.santander.mortgage.service;
 
 
-import org.springframework.stereotype.Service;
 
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 
 public interface MortgageService {
 	
 	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto) ;
 
-	//public ConfirmMortgageResponseDto confirmMortgage() ;
 
-	public ConfirmMortgageResponseDto confirmMortgage(Long userId);
+	public PropertyDetailsDto confirmMortgage(Long userId);
 
 	
 }
