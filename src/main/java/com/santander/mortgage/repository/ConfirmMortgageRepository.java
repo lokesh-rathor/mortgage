@@ -12,3 +12,4 @@ public interface ConfirmMortgageRepository extends JpaRepository<ConfirmMortgage
 
 public ConfirmMortgageDetails findByUserId(@Param(value = "UserId") Long UserId);
 }
+
