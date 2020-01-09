@@ -1,5 +1,7 @@
 package com.santander.mortgage.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
+import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.service.MortgageService;
 
 @CrossOrigin
@@ -17,24 +20,44 @@ import com.santander.mortgage.service.MortgageService;
 @RequestMapping("/api")
 public class MortgageController {
 
-	
-	
 	@Autowired
 	private MortgageService mortgageService;
-	
-//	@GetMapping("get-data")
-//	public String getData() {
-//		return proxy.sayHello();
-//	}
-	
+
+	// @GetMapping("get-data")
+	// public String getData() {
+	// return proxy.sayHello();
+	// }
+
 	@GetMapping("/confirmMortgage/{userId}")
-	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId){
-		
-			ConfirmMortgageResponseDto confirmMortgageResponseDto =  mortgageService.confirmMortgage(userId);
-		
+	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId) {
+		ConfirmMortgageResponseDto confirmMortgageResponseDto = null;
+
+		try {
+			confirmMortgageResponseDto = mortgageService.confirmMortgage(userId);
+		} catch (NullPointerException npe) {
+			if (npe.getMessage() == null) {
+				System.out.println("Error Message : No Record found for this User Id " + userId);
+			}
+		}
 		return new ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK);
+	}
+
+	// @GetMapping("get-data")
+	// public String getData() {
+	// return proxy.sayHello();
+	// }
+
+	@GetMapping("/mortgageOptions")
+	public ResponseEntity<List<MortgageOptionsResponseDto>> mortgageOptions() {
+		List<MortgageOptionsResponseDto> mortgageOptionsResponseDtoList = null;
+
+		mortgageOptionsResponseDtoList = mortgageService.mortgageOptions();
+
+		if (mortgageOptionsResponseDtoList.size() == 0) {
+			System.out.println("Error Message : No Mortgage options available in DB");
 		}
 
+		return new ResponseEntity<>(mortgageOptionsResponseDtoList, HttpStatus.OK);
 	}
-	
 
+}

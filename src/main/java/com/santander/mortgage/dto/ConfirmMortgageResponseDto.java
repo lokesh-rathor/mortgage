@@ -9,10 +9,13 @@ public class ConfirmMortgageResponseDto {
 	private String mortgageTerm;
 	private long estimatedPropertyValue;
 	private long borrowingAmount;
-	private long loanToValue;
+	private float loanToValue;
+	private float initialRate;
 	private long followOnRate;
 	private Date rateFinishedDate;
+	private int productFee;
 	private int productFeeAddedToLoanAmt;
+	private int monthlyRepayment;
 	
 	
 	public String getBuyerType() {
@@ -33,6 +36,24 @@ public class ConfirmMortgageResponseDto {
 	public void setMortgageTerm(String mortgageTerm) {
 		this.mortgageTerm = mortgageTerm;
 	}
+	public float getInitialRate() {
+		return initialRate;
+	}
+	public void setInitialRate(float initialRate) {
+		this.initialRate = initialRate;
+	}
+	public int getProductFee() {
+		return productFee;
+	}
+	public void setProductFee(int productFee) {
+		this.productFee = productFee;
+	}
+	public int getMonthlyRepayment() {
+		return monthlyRepayment;
+	}
+	public void setMonthlyRepayment(int monthlyRepayment) {
+		this.monthlyRepayment = monthlyRepayment;
+	}
 	public long getEstimatedPropertyValue() {
 		return estimatedPropertyValue;
 	}
@@ -45,10 +66,10 @@ public class ConfirmMortgageResponseDto {
 	public void setBorrowingAmount(long borrowingAmount) {
 		this.borrowingAmount = borrowingAmount;
 	}
-	public long getLoanToValue() {
+	public float getLoanToValue() {
 		return loanToValue;
 	}
-	public void setLoanToValue(long loanToValue) {
+	public void setLoanToValue(float loanToValue) {
 		this.loanToValue = loanToValue;
 	}
 	public long getFollowOnRate() {
@@ -69,7 +90,4 @@ public class ConfirmMortgageResponseDto {
 	public void setProductFeeAddedToLoanAmt(int productFeeAddedToLoanAmt) {
 		this.productFeeAddedToLoanAmt = productFeeAddedToLoanAmt;
 	}
-	
-
-	
 }

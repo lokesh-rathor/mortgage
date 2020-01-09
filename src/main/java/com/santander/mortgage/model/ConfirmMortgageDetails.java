@@ -33,7 +33,10 @@ public class ConfirmMortgageDetails {
 	private long borrowingAmount;
 	
 	@Column (name="LoanToValue")
-	private long loanToValue;
+	private float loanToValue;
+	
+	@Column (name="InitialRate")
+	private float initialRate;
 	
 	@Column (name="FollowOnRate")
 	private long followOnRate;
@@ -41,8 +44,38 @@ public class ConfirmMortgageDetails {
 	@Column (name="RateFinishedDate")
 	private Date rateFinishedDate;
 	
+	@Column (name="ProductFee")
+	private int productFee;
+	
 	@Column (name="ProductFeeAddedToLoanAmt")
 	private int productFeeAddedToLoanAmt;
+	
+	@Column (name="MontlyRepayment")
+	private int monthlyRepayment;
+
+	public float getInitialRate() {
+		return initialRate;
+	}
+
+	public void setInitialRate(float initialRate) {
+		this.initialRate = initialRate;
+	}
+
+	public int getProductFee() {
+		return productFee;
+	}
+
+	public void setProductFee(int productFee) {
+		this.productFee = productFee;
+	}
+
+	public int getMonthlyRepayment() {
+		return monthlyRepayment;
+	}
+
+	public void setMonthlyRepayment(int monthlyRepayment) {
+		this.monthlyRepayment = monthlyRepayment;
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -92,11 +125,11 @@ public class ConfirmMortgageDetails {
 		this.borrowingAmount = borrowingAmount;
 	}
 
-	public long getLoanToValue() {
+	public float getLoanToValue() {
 		return loanToValue;
 	}
 
-	public void setLoanToValue(long loanToValue) {
+	public void setLoanToValue(float loanToValue) {
 		this.loanToValue = loanToValue;
 	}
 
