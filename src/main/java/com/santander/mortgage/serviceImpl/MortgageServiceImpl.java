@@ -55,7 +55,7 @@ public class MortgageServiceImpl implements MortgageService{
 		return confirmMortgageResponseDto;
 	}
 
-	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto) {
+	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto){
 		
 		PropertyDetails propertyDetails = new PropertyDetails();
 		propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());

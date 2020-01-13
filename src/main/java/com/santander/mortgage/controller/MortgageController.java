@@ -1,6 +1,9 @@
 package com.santander.mortgage.controller;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +27,18 @@ import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.service.ValuationService;
+import com.santander.mortgage.exception.InvalidInputException;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
+
 public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
+	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
+
+
 
 	// @GetMapping("get-data")
 	// public String getData() {
@@ -53,7 +61,9 @@ public class MortgageController {
 	
 	@PostMapping("/propertyDetails")
 	public ResponseEntity<MortgageResponseDto> mortgage(
-			@RequestBody MortgageRequestDto mortgageRequestDto) {
+			
+			@RequestBody MortgageRequestDto mortgageRequestDto) throws InvalidInputException {
+		logger.info("Inside Property Details method: --");
 		System.out.println(mortgageRequestDto.getNumberOfBedrooms());
 		MortgageResponseDto mortgageResponseDto=mortgageService.savePropertyDetails(mortgageRequestDto);
 		return new ResponseEntity<>(mortgageResponseDto, HttpStatus.OK);
