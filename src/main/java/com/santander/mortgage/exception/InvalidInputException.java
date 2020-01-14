@@ -1,6 +1,6 @@
 package com.santander.mortgage.exception;
 
-public class InvalidInputException extends Exception {
+public class InvalidInputException extends RuntimeException {
 
 	/**
 	 * 
