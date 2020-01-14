@@ -138,6 +138,7 @@ public class MortgageServiceImpl implements MortgageService{
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {	
 		
 		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+		
 		PaymentDetails payment=new PaymentDetails();
 		payment.setUser(user.getBody());
 		payment.setSortCode(paymentDetailsRequestDto.getSortCode());

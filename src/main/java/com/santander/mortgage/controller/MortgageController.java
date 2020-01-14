@@ -126,7 +126,11 @@ public class MortgageController {
 
 	@PostMapping("/payment-details")
 	ResponseEntity<PaymentDetailsResponseDto> payemtDetails(
-			@RequestBody @Valid PaymentDetailsRequestDto paymentDetailsRequestDto) {
+			@RequestBody @Valid PaymentDetailsRequestDto paymentDetailsRequestDto, Errors errors) {
+		
+		if (errors.hasErrors()) {
+			throw new InvalidInputException("Invalid Input.");
+		}
 
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.updatePaymentDetails(paymentDetailsRequestDto);

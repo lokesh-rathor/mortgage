@@ -98,6 +98,28 @@ public class MortgageControllerTest {
 
 	}
 	
+	@Test
+	public void testPaymentDetailsError() throws Exception {
+
+		UserRegistration registrationRequest = new UserRegistration();
+		registrationRequest.setUserId(1L);
+		registrationRequest.setEmail("test@test.com");
+
+		PaymentDetailsRequestDto request = new PaymentDetailsRequestDto();
+		request.setUserId(1L);
+		request.setCurrentCircumstances(1);
+		request.setSortCode(15455L);
+		request.setAccountNumber(124521L);
+		request.setAccountHolderName("t");
+		request.setDayOfPayment(1);
+
+		String requestJson = jsonToString(request);
+
+		mockMvc.perform(post("/api/payment-details").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+				.andExpect(status().isBadRequest());
+
+	}
+	
 	
 	@Test // (expected = InvalidInputException.class)
 	public void propertyDetailsTest() throws Exception {

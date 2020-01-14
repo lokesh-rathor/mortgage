@@ -2,6 +2,7 @@ package com.santander.mortgage.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.exception.ErrorResponse;
 import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.UserRegistration;
 import com.santander.mortgage.proxy.RegistrationProxy;
@@ -55,6 +57,21 @@ class TestPaymentDetailsService {
 		
 		assertEquals(paymentDetailsResponse.getUserId(),paymentDetailsResponseDto.getUserId());
 	}
+	
+	@Test
+	void testUpdatePaymentDetailsError() {
+		
+		PaymentDetailsRequestDto paymentDetailsRequestDto = new PaymentDetailsRequestDto();
+		paymentDetailsRequestDto.setUserId(145L);
+		
+		UserRegistration userRegistration=new UserRegistration();
+		userRegistration.setUserId(145L);
+		
+		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenThrow(RuntimeException.class);
+		
+		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto));
+	}
+
 
 	private ResponseEntity<UserRegistration> getData(){
 		
