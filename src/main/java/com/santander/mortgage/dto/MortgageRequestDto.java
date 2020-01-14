@@ -1,5 +1,7 @@
 package com.santander.mortgage.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class MortgageRequestDto {
 	
 	
@@ -16,7 +18,7 @@ public class MortgageRequestDto {
 	private Integer propertyAge;
 	
 	private String isPropertyCovered; 
-	
+	@NotNull
 	private String tenureType;
 
 	public Long getUserId() {
