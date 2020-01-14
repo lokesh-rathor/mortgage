@@ -1,6 +1,9 @@
 package com.santander.mortgage.controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.service.MortgageService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.santander.mortgage.dto.PaymentDetailsRequestDto;
+import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
-import com.santander.mortgage.proxy.RegistrationProxy;
+import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin(origins = "*")
@@ -112,5 +113,13 @@ public class MortgageController {
 
 	}
 	
+	
+	@PostMapping("/payment-details")
+	ResponseEntity<PaymentDetailsResponseDto> payemtDetails(@RequestBody @Valid PaymentDetailsRequestDto paymentDetailsRequestDto){
+		
+		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService.updatePaymentDetails(paymentDetailsRequestDto);
+		
+		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
+	}
 	
 }

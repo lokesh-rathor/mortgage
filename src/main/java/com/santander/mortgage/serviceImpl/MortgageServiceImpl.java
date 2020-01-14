@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
-import com.santander.mortgage.model.ConfirmMortgageDetails;
-import com.santander.mortgage.model.MortgageOptionsDetail;
-import com.santander.mortgage.repository.ConfirmMortgageRepository;
-import com.santander.mortgage.repository.MortgageOptionsRepository;
-import com.santander.mortgage.service.MortgageService;
-
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.PaymentDetailsRequestDto;
+import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.model.ConfirmMortgageDetails;
+import com.santander.mortgage.model.MortgageOptionsDetail;
+import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.PropertyDetails;
+import com.santander.mortgage.model.UserRegistration;
+import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.repository.ConfirmMortgageRepository;
+import com.santander.mortgage.repository.MortgageOptionsRepository;
+import com.santander.mortgage.repository.PaymentDetailsRepository;
 import com.santander.mortgage.repository.PropertyDetailsRepository;
 import com.santander.mortgage.service.MortgageService;
 
@@ -28,12 +31,17 @@ public class MortgageServiceImpl implements MortgageService{
 	@Autowired
 	private PropertyDetailsRepository propertyDetailsRepository;
 	
-
+	@Autowired
+	private PaymentDetailsRepository paymentDetailsRepository;
+	
 	@Autowired
 	private ConfirmMortgageRepository confirmMortgageRepository;
 
 	@Autowired
 	private MortgageOptionsRepository mortgageOptionsRepository;
+	
+	@Autowired
+	private RegistrationProxy registrationProxy;
 
 	@Override
 	public ConfirmMortgageResponseDto confirmMortgage(Long userId) {
@@ -124,5 +132,25 @@ public class MortgageServiceImpl implements MortgageService{
 			return mortgageOptionsResponseDto;
 		}).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 		return mortgageOptionsResponseDtoList;
+	}
+
+	@Override
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {	
+		
+		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+		PaymentDetails payment=new PaymentDetails();
+		payment.setUser(user.getBody());
+		payment.setSortCode(paymentDetailsRequestDto.getSortCode());
+		payment.setAccountHolderName(paymentDetailsRequestDto.getAccountHolderName());
+		payment.setAccountNumber(paymentDetailsRequestDto.getAccountNumber());
+		payment.setCurrentcircumstances(paymentDetailsRequestDto.getCurrentCircumstances());
+		payment.setDayOfPayment(paymentDetailsRequestDto.getDayOfPayment());
+		PaymentDetails paymentDetails = paymentDetailsRepository.save(payment);
+		
+		PaymentDetailsResponseDto paymentDetailsResponseDto=new PaymentDetailsResponseDto();
+		paymentDetailsResponseDto.setMessage("payment done Successfully");
+		paymentDetailsResponseDto.setUserId(paymentDetails.getUser().getUserId());
+		
+		return paymentDetailsResponseDto;
 	}
 }
