@@ -3,6 +3,8 @@ package com.santander.mortgage.dto;
 public class MortgageRequestDto {
 	
 	
+	private Long propertyId;
+	
 	private Long userId;
 	
 	private String propertyAddress;
@@ -84,6 +86,14 @@ public class MortgageRequestDto {
 
 	public void setPropertyAge(Integer propertyAge) {
 		this.propertyAge = propertyAge;
+	}
+
+	public Long getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(Long propertyId) {
+		this.propertyId = propertyId;
 	}
 	
 	

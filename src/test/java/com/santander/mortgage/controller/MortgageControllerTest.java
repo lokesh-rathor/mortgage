@@ -27,6 +27,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.repository.PropertyDetailsRepository;
@@ -102,6 +103,22 @@ public class MortgageControllerTest {
 			assertEquals(200, status);
 	}
 	
+	@Test
+	public void testGetpropertyById() throws Exception
+	{
+		Long userId = (long) 1.0F;
+		MortgageService mockMortgageService = Mockito.mock(MortgageService.class);
+		Mockito.when(mockMortgageService.getPropertyDetailsById(Mockito.any())).thenReturn(getPropertyById());
+		PropertyDetailsDto propertyDetailsDto = mockMortgageService.getPropertyDetailsById(userId);
+		assertEquals("H.No 77 , UK London", propertyDetailsDto.getPropertyAddress());
+		assertEquals("Property_1", propertyDetailsDto.getPropertyType());
+		assertEquals(4, propertyDetailsDto.getNumberOfBedrooms());
+		assertEquals("After 1980", propertyDetailsDto.getPropertyBuilt());
+		assertEquals(10, propertyDetailsDto.getPropertyAge());
+		assertEquals("N", propertyDetailsDto.getIsPropertyCovered());
+		assertEquals("Leasehold", propertyDetailsDto.getTenureType());
+	}
+	
 	@Test // (expected = InvalidInputException.class)
 	public void propertyDetailsErrorTest() throws Exception {
 		//Date d1 = new Date(2017, 12, 12);
@@ -132,6 +149,18 @@ public class MortgageControllerTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String request = objectMapper.writeValueAsString(mortgageRequestDto);
 		return request;
+	}
+	
+	private PropertyDetailsDto getPropertyById() {
+		PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
+		propertyDetailsDto.setPropertyAddress("H.No 77 , UK London");
+		propertyDetailsDto.setPropertyType("Property_1");
+		propertyDetailsDto.setNumberOfBedrooms(4);
+		propertyDetailsDto.setPropertyBuilt("After 1980");
+		propertyDetailsDto.setPropertyAge(10);
+		propertyDetailsDto.setIsPropertyCovered("N");
+		propertyDetailsDto.setTenureType("Leasehold");
+		return propertyDetailsDto;
 	}
 
 }

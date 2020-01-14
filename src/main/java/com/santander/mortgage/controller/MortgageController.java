@@ -18,6 +18,7 @@ import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.service.MortgageService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,6 +71,17 @@ public class MortgageController {
 	
 	}
 	
+	
+	  @GetMapping("/propertyDetailsById/{userId}")
+	  public ResponseEntity<PropertyDetailsDto> getPropertyDetailsById(@PathVariable("userId") Long userId) {
+	  PropertyDetailsDto propertyDetailsDto = null;
+	  
+	  try { propertyDetailsDto = mortgageService.getPropertyDetailsById(userId); }
+	  catch (NullPointerException npe) { if (npe.getMessage() == null) {
+	  System.out.println("Error Message : No Record found for this User Id " +
+	  userId); } } return new ResponseEntity<>(propertyDetailsDto, HttpStatus.OK);
+	  }
+	 
 	/*@GetMapping("/confirmMortgage/{userId}")
 	public ResponseEntity<PropertyDetailsDto> confirmMortgage(@PathVariable("userId") Long userId){	
 		PropertyDetailsDto confirmMortgageResponseDto =  mortgageService.confirmMortgage(userId);
