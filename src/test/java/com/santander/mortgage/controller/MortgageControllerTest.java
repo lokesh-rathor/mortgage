@@ -67,6 +67,21 @@ public class MortgageControllerTest {
 	 * @MockBean private PropertyDetailsRepository propertyDetailsRepository;
 	 */
 
+	/*
+	 * @Before public void setUp() { PropertyDetailsDto propertyDetails = new
+	 * PropertyDetailsDto(); propertyDetails.setUserId((long) 123);
+	 * 
+	 * Mockito.when(mortgageService.getPropertyDetailsById(propertyDetails.getUserId
+	 * ())) .thenReturn(propertyDetails); }
+	 * 
+	 * 
+	 * @Test public void getPropertyByIdNotFoundTest() { Long userId = 123L;
+	 * PropertyDetailsDto found = mortgageService.getPropertyDetailsById((long)
+	 * userId);
+	 * 
+	 * assertThat(found.getUserId()) .isEqualTo(userId); }
+	 */
+
 	@Test
 	public void testPaymentDetails() throws Exception {
 
@@ -118,20 +133,18 @@ public class MortgageControllerTest {
 
 	@Test // (expected = InvalidInputException.class)
 	public void propertyDetailsTest() throws Exception {
-		// Date d1 = new Date(2017, 12, 12);
-
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
 
 		mortgageResponseDto.setUserId((int) 1L);
 		mortgageResponseDto.setMessage("Property Details Saved Succefully");
 
 		MortgageRequestDto mortgageRequestDto = new MortgageRequestDto();
-		mortgageRequestDto.setPropertyAddress("ljkhlkj");
+		mortgageRequestDto.setPropertyAddress("H.No 77 , UK London");
 		mortgageRequestDto.setPropertyType("Property_3");
 		mortgageRequestDto.setNumberOfBedrooms(4);
-		mortgageRequestDto.setPropertyBuilt("1");
+		mortgageRequestDto.setPropertyBuilt("After 1980");
 		mortgageRequestDto.setPropertyAge(20);
-		mortgageRequestDto.setIsPropertyCovered("Yes");
+		mortgageRequestDto.setIsPropertyCovered("Y");
 		mortgageRequestDto.setTenureType("100 years");
 
 		String request = this.mapper(mortgageRequestDto);
