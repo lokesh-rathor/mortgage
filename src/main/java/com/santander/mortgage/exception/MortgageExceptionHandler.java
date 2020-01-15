@@ -12,20 +12,20 @@ import org.springframework.web.context.request.WebRequest;
 public class MortgageExceptionHandler {
 	
 	@ExceptionHandler(value = Exception.class)
-    public final ResponseEntity<Object> handleUserNotFoundException(Exception ex) {
+    public final ResponseEntity<ErrorResponse> handleUserNotFoundException(Exception ex) {
         ErrorResponse error = new ErrorResponse();
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setMessage(ex.getMessage());
-        return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	
 	@ExceptionHandler(InvalidInputException.class)
-	public final ResponseEntity<Object> handleInvalidInputException(InvalidInputException ex,
+	public final ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex,
 			WebRequest request) {
 		ErrorResponse exceptionResponse = new ErrorResponse();
 		exceptionResponse.setMessage(ex.getMessage());
 		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ErrorResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
 

@@ -30,7 +30,7 @@ import com.santander.mortgage.exception.InvalidInputException;
 import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 

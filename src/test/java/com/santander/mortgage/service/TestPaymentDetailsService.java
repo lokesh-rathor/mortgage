@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
-import com.santander.mortgage.exception.ErrorResponse;
 import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.UserRegistration;
 import com.santander.mortgage.proxy.RegistrationProxy;
@@ -42,7 +41,7 @@ class TestPaymentDetailsService {
 		UserRegistration userRegistration=new UserRegistration();
 		userRegistration.setUserId(1L);
 		
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity(userRegistration,HttpStatus.OK));
+		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
 		
 		PaymentDetails paymentDetails = new PaymentDetails();
 		paymentDetails.setAccountHolderName("asdfaf");
@@ -70,14 +69,6 @@ class TestPaymentDetailsService {
 		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenThrow(RuntimeException.class);
 		
 		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto));
-	}
-
-
-	private ResponseEntity<UserRegistration> getData(){
-		
-		UserRegistration userRegistration=new UserRegistration();
-		userRegistration.setUserId(1L);
-		return new ResponseEntity<UserRegistration>(userRegistration, HttpStatus.OK);
 	}
 
 }
