@@ -14,9 +14,21 @@ import javax.persistence.Table;
 public class PropertyDetails {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="property_id")
+	private Long propertyId;
+	
+	
+	public Long getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(Long propertyId) {
+		this.propertyId = propertyId;
+	}
+
 	@Column(name="UserId")
-	private Long userId;
+	private Long userId = 123L;
 	
 	@Column(name="PropertyAddress")
 	private String propertyAddress;

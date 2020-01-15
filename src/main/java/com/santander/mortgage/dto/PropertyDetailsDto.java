@@ -10,6 +10,13 @@ package com.santander.mortgage.dto;
 public class PropertyDetailsDto {
 	
 	private Long userId;
+	private Long propertyId;
+	public Long getPropertyId() {
+		return propertyId;
+	}
+	public void setPropertyId(Long propertyId) {
+		this.propertyId = propertyId;
+	}
 	private String propertyAddress;
 	private String propertyType;
 	private int numberOfBedrooms;

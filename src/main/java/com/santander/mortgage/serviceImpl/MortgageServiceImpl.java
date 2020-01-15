@@ -2,6 +2,7 @@ package com.santander.mortgage.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.model.ConfirmMortgageDetails;
 import com.santander.mortgage.model.MortgageOptionsDetail;
 import com.santander.mortgage.model.PaymentDetails;
@@ -134,6 +136,29 @@ public class MortgageServiceImpl implements MortgageService{
 		return mortgageOptionsResponseDtoList;
 	}
 
+
+	
+	
+	  @Override
+	  public PropertyDetailsDto getPropertyDetailsById(Long userId) {
+	  PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(userId);
+	  PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
+	  
+	  System.out.println("In get property");
+	  propertyDetailsDto.setUserId(propertyDetails.getUserId());
+	  propertyDetailsDto.setPropertyId(propertyDetails.getPropertyId());
+	  propertyDetailsDto.setPropertyAddress(propertyDetails.getPropertyAddress());
+	  propertyDetailsDto.setPropertyType(propertyDetails.getPropertyType());
+	  propertyDetailsDto.setNumberOfBedrooms(propertyDetails.getNumberOfBedrooms())
+	  ; propertyDetailsDto.setPropertyBuilt(propertyDetails.getPropertyBuilt());
+	  propertyDetailsDto.setPropertyAge(propertyDetails.getPropertyAge());
+	  propertyDetailsDto.setIsPropertyCovered(propertyDetails.getIsPropertyCovered(
+	  )); propertyDetailsDto.setTenureType(propertyDetails.getTenureType());
+	  
+	  return propertyDetailsDto; }
+	 
+	 
+
 	@Override
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {	
 		
@@ -154,4 +179,5 @@ public class MortgageServiceImpl implements MortgageService{
 		
 		return paymentDetailsResponseDto;
 	}
+
 }

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,17 +17,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.model.UserRegistration;
 import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
-
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MortgageController.class)
@@ -36,10 +34,10 @@ public class MortgageControllerTest {
 
 	@InjectMocks
 	private MortgageController mortgageController;
-	
+
 	@Mock
 	MortgageControllerTest mortgageControllerTest;
-	
+
 	@MockBean
 	private ValuationService valuationService;
 
@@ -54,13 +52,13 @@ public class MortgageControllerTest {
 	 * 
 	 * ValuationResponseDto response = new ValuationResponseDto();
 	 * response.setMessage("Added Successfully"); response.setUserId(2L);
-	 * when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).
-	 * thenReturn(response);
+	 * when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class
+	 * ))). thenReturn(response);
 	 * 
-	 * mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON
-	 * ).param("contactPerson", "nrj") .param("contactName",
-	 * "123456").param("contactNumber", "Anny").param("isPropertyInScotland", "1"))
-	 * .andExpect(status().is(200));
+	 * mockMvc.perform(post("/api/valuation").contentType(MediaType.
+	 * APPLICATION_JSON ).param("contactPerson", "nrj") .param("contactName",
+	 * "123456").param("contactNumber", "Anny").param("isPropertyInScotland",
+	 * "1")) .andExpect(status().is(200));
 	 * 
 	 * }
 	 */
@@ -68,9 +66,22 @@ public class MortgageControllerTest {
 	/*
 	 * @MockBean private PropertyDetailsRepository propertyDetailsRepository;
 	 */
-	
-	
-	
+
+	/*
+	 * @Before public void setUp() { PropertyDetailsDto propertyDetails = new
+	 * PropertyDetailsDto(); propertyDetails.setUserId((long) 123);
+	 * 
+	 * Mockito.when(mortgageService.getPropertyDetailsById(propertyDetails.getUserId
+	 * ())) .thenReturn(propertyDetails); }
+	 * 
+	 * 
+	 * @Test public void getPropertyByIdNotFoundTest() { Long userId = 123L;
+	 * PropertyDetailsDto found = mortgageService.getPropertyDetailsById((long)
+	 * userId);
+	 * 
+	 * assertThat(found.getUserId()) .isEqualTo(userId); }
+	 */
+
 	@Test
 	public void testPaymentDetails() throws Exception {
 
@@ -97,7 +108,7 @@ public class MortgageControllerTest {
 				.andExpect(status().is(200));
 
 	}
-	
+
 	@Test
 	public void testPaymentDetailsError() throws Exception {
 
@@ -119,65 +130,87 @@ public class MortgageControllerTest {
 				.andExpect(status().isBadRequest());
 
 	}
-	
-	
+
 	@Test // (expected = InvalidInputException.class)
 	public void propertyDetailsTest() throws Exception {
-		//Date d1 = new Date(2017, 12, 12);
-		
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
-		
+
 		mortgageResponseDto.setUserId((int) 1L);
 		mortgageResponseDto.setMessage("Property Details Saved Succefully");
-		
-			MortgageRequestDto mortgageRequestDto = new MortgageRequestDto();
-			mortgageRequestDto.setPropertyAddress("ljkhlkj");
-			mortgageRequestDto.setPropertyType("Property_3");
-			mortgageRequestDto.setNumberOfBedrooms(4);
-			mortgageRequestDto.setPropertyBuilt("1");
-			mortgageRequestDto.setPropertyAge(20);
-			mortgageRequestDto.setIsPropertyCovered("Yes");
-			mortgageRequestDto.setTenureType("100 years");
 
-			String request = this.mapper(mortgageRequestDto);
+		MortgageRequestDto mortgageRequestDto = new MortgageRequestDto();
+		mortgageRequestDto.setPropertyAddress("H.No 77 , UK London");
+		mortgageRequestDto.setPropertyType("Property_3");
+		mortgageRequestDto.setNumberOfBedrooms(4);
+		mortgageRequestDto.setPropertyBuilt("After 1980");
+		mortgageRequestDto.setPropertyAge(20);
+		mortgageRequestDto.setIsPropertyCovered("Y");
+		mortgageRequestDto.setTenureType("100 years");
 
-			MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails")
-					.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andReturn();
+		String request = this.mapper(mortgageRequestDto);
 
-			int status = mvcResult.getResponse().getStatus();
-			assertEquals(200, status);
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails")
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(200, status);
 	}
-	
+
+	@Test
+	public void testGetpropertyById() throws Exception {
+		Long userId = (long) 1.0F;
+		MortgageService mockMortgageService = Mockito.mock(MortgageService.class);
+		Mockito.when(mockMortgageService.getPropertyDetailsById(Mockito.any())).thenReturn(getPropertyById());
+		PropertyDetailsDto propertyDetailsDto = mockMortgageService.getPropertyDetailsById(userId);
+		assertEquals("H.No 77 , UK London", propertyDetailsDto.getPropertyAddress());
+		assertEquals("Property_1", propertyDetailsDto.getPropertyType());
+		assertEquals(4, propertyDetailsDto.getNumberOfBedrooms());
+		assertEquals("After 1980", propertyDetailsDto.getPropertyBuilt());
+		assertEquals(10, propertyDetailsDto.getPropertyAge());
+		assertEquals("N", propertyDetailsDto.getIsPropertyCovered());
+		assertEquals("Leasehold", propertyDetailsDto.getTenureType());
+	}
+
 	@Test // (expected = InvalidInputException.class)
 	public void propertyDetailsErrorTest() throws Exception {
-		//Date d1 = new Date(2017, 12, 12);
-		
+		// Date d1 = new Date(2017, 12, 12);
+
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
-		
+
 		mortgageResponseDto.setUserId((int) 1L);
 		mortgageResponseDto.setMessage("Bad Request");
-		
-			MortgageRequestDto mortgageRequestDto = new MortgageRequestDto();
-			mortgageRequestDto.setPropertyAddress("ljkhlkj");
-			mortgageRequestDto.setPropertyType("Property_3");
-			mortgageRequestDto.setNumberOfBedrooms(4);
-			mortgageRequestDto.setPropertyBuilt("1");
-			mortgageRequestDto.setPropertyAge(20);
-			mortgageRequestDto.setIsPropertyCovered("Yes");
-			mortgageRequestDto.setTenureType(null);
 
-			String request = this.mapper(mortgageRequestDto);
+		MortgageRequestDto mortgageRequestDto = new MortgageRequestDto();
+		mortgageRequestDto.setPropertyAddress("ljkhlkj");
+		mortgageRequestDto.setPropertyType("Property_3");
+		mortgageRequestDto.setNumberOfBedrooms(4);
+		mortgageRequestDto.setPropertyBuilt("1");
+		mortgageRequestDto.setPropertyAge(20);
+		mortgageRequestDto.setIsPropertyCovered("Yes");
+		mortgageRequestDto.setTenureType(null);
 
+		String request = this.mapper(mortgageRequestDto);
 
-			mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails").contentType(MediaType.APPLICATION_JSON_VALUE)
-					.content(request)).andExpect(status().isBadRequest());
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails")
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isBadRequest());
 	}
-
 
 	private String mapper(MortgageRequestDto mortgageRequestDto) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String request = objectMapper.writeValueAsString(mortgageRequestDto);
 		return request;
+	}
+
+	private PropertyDetailsDto getPropertyById() {
+		PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
+		propertyDetailsDto.setPropertyAddress("H.No 77 , UK London");
+		propertyDetailsDto.setPropertyType("Property_1");
+		propertyDetailsDto.setNumberOfBedrooms(4);
+		propertyDetailsDto.setPropertyBuilt("After 1980");
+		propertyDetailsDto.setPropertyAge(10);
+		propertyDetailsDto.setIsPropertyCovered("N");
+		propertyDetailsDto.setTenureType("Leasehold");
+		return propertyDetailsDto;
 	}
 
 	private String jsonToString(PaymentDetailsRequestDto request) throws JsonProcessingException {
