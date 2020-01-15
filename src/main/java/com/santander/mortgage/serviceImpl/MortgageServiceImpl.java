@@ -46,7 +46,7 @@ public class MortgageServiceImpl implements MortgageService{
 	private RegistrationProxy registrationProxy;
 
 	@Override
-	public ConfirmMortgageResponseDto confirmMortgage(Long userId) {
+	public ConfirmMortgageResponseDto confirmMortgage(Long userId) { 
 		ConfirmMortgageDetails confirmMortgageDetails = confirmMortgageRepository.findByUserId(userId);
 		ConfirmMortgageResponseDto confirmMortgageResponseDto = new ConfirmMortgageResponseDto();
 
@@ -67,16 +67,33 @@ public class MortgageServiceImpl implements MortgageService{
 
 	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto){
 		
-		PropertyDetails propertyDetails = new PropertyDetails();
-		propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
-		propertyDetails.setPropertyType(mortgageRequestDto.getPropertyType());
-		propertyDetails.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
-		propertyDetails.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
-		propertyDetails.setPropertyAge(mortgageRequestDto.getPropertyAge());
-		propertyDetails.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
-		propertyDetails.setTenureType(mortgageRequestDto.getTenureType());
+		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(mortgageRequestDto.getUserId());
 		
-		propertyDetails=propertyDetailsRepository.save(propertyDetails);
+		if(propertyDetails == null) {
+			PropertyDetails propertyDetail = new PropertyDetails();
+			propertyDetail.setUserId(mortgageRequestDto.getUserId());
+			propertyDetail.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
+			propertyDetail.setPropertyType(mortgageRequestDto.getPropertyType());
+			propertyDetail.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
+			propertyDetail.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
+			propertyDetail.setPropertyAge(mortgageRequestDto.getPropertyAge());
+			propertyDetail.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
+			propertyDetail.setTenureType(mortgageRequestDto.getTenureType());
+			propertyDetail.setPostCode(mortgageRequestDto.getPostCode());
+			propertyDetails=propertyDetailsRepository.save(propertyDetail);
+
+		} else {
+			propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
+			propertyDetails.setPropertyType(mortgageRequestDto.getPropertyType());
+			propertyDetails.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
+			propertyDetails.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
+			propertyDetails.setPropertyAge(mortgageRequestDto.getPropertyAge());
+			propertyDetails.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
+			propertyDetails.setTenureType(mortgageRequestDto.getTenureType());
+			propertyDetails.setPostCode(mortgageRequestDto.getPostCode());
+			propertyDetails=propertyDetailsRepository.save(propertyDetails);
+
+		}
 		
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
 		mortgageResponseDto.setUserId(propertyDetails.getUserId().intValue());
@@ -146,6 +163,7 @@ public class MortgageServiceImpl implements MortgageService{
 	  
 	  System.out.println("In get property");
 	  propertyDetailsDto.setUserId(propertyDetails.getUserId());
+	  propertyDetailsDto.setPostCode(propertyDetails.getPostCode());
 	  propertyDetailsDto.setPropertyId(propertyDetails.getPropertyId());
 	  propertyDetailsDto.setPropertyAddress(propertyDetails.getPropertyAddress());
 	  propertyDetailsDto.setPropertyType(propertyDetails.getPropertyType());

@@ -87,7 +87,7 @@ public class PaymentDetails {
 		return dayOfPayment;
 	}
 
-	public void setDayOfPayment(Integer dayOfPayment) {
+	public void setDayOfPayment(Integer dayOfPayment) { 
 		this.dayOfPayment = dayOfPayment;
 	}
 	

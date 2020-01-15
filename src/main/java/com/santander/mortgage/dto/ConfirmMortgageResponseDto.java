@@ -9,7 +9,7 @@ public class ConfirmMortgageResponseDto {
 	private String mortgageTerm;
 	private long estimatedPropertyValue;
 	private long borrowingAmount;
-	private float loanToValue;
+	private float loanToValue;   
 	private float initialRate;
 	private long followOnRate;
 	private Date rateFinishedDate;

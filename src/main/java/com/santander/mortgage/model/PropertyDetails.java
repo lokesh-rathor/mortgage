@@ -29,10 +29,13 @@ public class PropertyDetails {
 	}
 
 	@Column(name="UserId")
-	private Long userId = 123L;
+	private Long userId;
 	
 	@Column(name="PropertyAddress")
 	private String propertyAddress;
+	
+	@Column(name="PostCode")
+	private String postCode;
 	
 	@Column(name="PropertyType")
 	private String propertyType;
@@ -46,6 +49,14 @@ public class PropertyDetails {
 	@Column(name="PropertyAge")
 	private int propertyAge;
 	
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+
 	@Column(name="isPropertyCovered")
 	private String isPropertyCovered; 
 	@Column(name="TenureType")

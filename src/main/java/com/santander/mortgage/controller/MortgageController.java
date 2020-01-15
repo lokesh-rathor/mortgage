@@ -48,7 +48,7 @@ public class MortgageController {
 	// @GetMapping("get-data")
 	// public String getData() {
 	// return proxy.sayHello();
-	// }
+	// } 
 
 	@GetMapping("/confirmMortgage/{userId}")
 	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId) {
