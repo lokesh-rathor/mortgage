@@ -46,14 +46,7 @@ public class MortgageController {
 	@GetMapping("/confirmMortgage/{userId}")
 	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId) {
 		ConfirmMortgageResponseDto confirmMortgageResponseDto = null;
-
-		try {
-			confirmMortgageResponseDto = mortgageService.confirmMortgage(userId);
-		} catch (NullPointerException npe) {
-			if (npe.getMessage() == null) {
-				System.out.println("Error Message : No Record found for this User Id " + userId);
-			}
-		}
+		confirmMortgageResponseDto = mortgageService.confirmMortgage(userId);
 		return new ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK);
 	}
 
@@ -66,7 +59,6 @@ public class MortgageController {
 		}
 
 		logger.info("Inside Property Details method: --");
-		System.out.println(mortgageRequestDto.getNumberOfBedrooms());
 		MortgageResponseDto mortgageResponseDto = mortgageService.savePropertyDetails(mortgageRequestDto);
 		return new ResponseEntity<MortgageResponseDto>(mortgageResponseDto, HttpStatus.OK);
 
@@ -88,18 +80,18 @@ public class MortgageController {
 
 	/*
 	 * @GetMapping("/confirmMortgage/{userId}") public
-	 * ResponseEntity<PropertyDetailsDto>
-	 * confirmMortgage(@PathVariable("userId") Long userId){ PropertyDetailsDto
-	 * confirmMortgageResponseDto = mortgageService.confirmMortgage(userId);
-	 * return new ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK); }
+	 * ResponseEntity<PropertyDetailsDto> confirmMortgage(@PathVariable("userId")
+	 * Long userId){ PropertyDetailsDto confirmMortgageResponseDto =
+	 * mortgageService.confirmMortgage(userId); return new
+	 * ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK); }
 	 */
 
 	/*
 	 * @GetMapping("/confirmMortgage/{userId}") public
-	 * ResponseEntity<PropertyDetailsDto>
-	 * confirmMortgage(@PathVariable("userId") Long userId){ PropertyDetailsDto
-	 * confirmMortgageResponseDto = mortgageService.confirmMortgage(userId);
-	 * return new ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK); }
+	 * ResponseEntity<PropertyDetailsDto> confirmMortgage(@PathVariable("userId")
+	 * Long userId){ PropertyDetailsDto confirmMortgageResponseDto =
+	 * mortgageService.confirmMortgage(userId); return new
+	 * ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK); }
 	 */
 
 	@GetMapping("/mortgageOptions")
@@ -117,11 +109,8 @@ public class MortgageController {
 
 	@PostMapping("/valuation")
 	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
-
 		ValuationResponseDto valuationResponseDto = valuationService.postValuation(valuationRequestDto);
-
 		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
-
 	}
 
 	@PostMapping("/payment-details")

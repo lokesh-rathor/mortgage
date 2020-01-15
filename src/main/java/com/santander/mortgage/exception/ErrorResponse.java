@@ -1,19 +1,8 @@
 package com.santander.mortgage.exception;
 
-import java.util.List;
-
 public class ErrorResponse {
-	
-	public ErrorResponse() {
-	}
-	
-	public ErrorResponse(String message, List<String> details) {
-        super();
-        this.message = message;
-    }
- 
 	private int status;
-    private String message;
+	private String message;
 
 	public int getStatus() {
 		return status;
