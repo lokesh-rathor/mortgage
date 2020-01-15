@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
 import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.ValuationRequestDto;
+import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.model.UserRegistration;
@@ -47,21 +49,26 @@ public class MortgageControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	/*
-	 * @Test public void testPostValuation() throws Exception {
-	 * 
-	 * ValuationResponseDto response = new ValuationResponseDto();
-	 * response.setMessage("Added Successfully"); response.setUserId(2L);
-	 * when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class
-	 * ))). thenReturn(response);
-	 * 
-	 * mockMvc.perform(post("/api/valuation").contentType(MediaType.
-	 * APPLICATION_JSON ).param("contactPerson", "nrj") .param("contactName",
-	 * "123456").param("contactNumber", "Anny").param("isPropertyInScotland",
-	 * "1")) .andExpect(status().is(200));
-	 * 
-	 * }
-	 */
+	@Test
+	public void testPostValuation() throws Exception {
+		ValuationRequestDto request = new ValuationRequestDto();
+		request.setContactName("nrj");
+		request.setContactNumber(5658846);
+		request.setContactPerson("Current Account");
+		request.setIsPropertyInScotland(0);
+		
+		String requestJson = jsonToString(request);  
+
+		ValuationResponseDto response = new ValuationResponseDto();
+		response.setMessage("Added Successfully");
+		response.setUserId(2L);
+		
+		when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
+
+		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+		.andExpect(status().is(200));
+
+	}
 
 	/*
 	 * @MockBean private PropertyDetailsRepository propertyDetailsRepository;
@@ -106,7 +113,6 @@ public class MortgageControllerTest {
 		when(mortgageService.updatePaymentDetails(Mockito.any(PaymentDetailsRequestDto.class))).thenReturn(response);
 		mockMvc.perform(post("/api/payment-details").contentType(MediaType.APPLICATION_JSON).content(requestJson))
 				.andExpect(status().is(200));
-
 	}
 
 	@Test
@@ -131,7 +137,7 @@ public class MortgageControllerTest {
 
 	}
 
-	@Test // (expected = InvalidInputException.class)
+	@Test
 	public void propertyDetailsTest() throws Exception {
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
 
@@ -213,7 +219,7 @@ public class MortgageControllerTest {
 		return propertyDetailsDto;
 	}
 
-	private String jsonToString(PaymentDetailsRequestDto request) throws JsonProcessingException {
+	private String jsonToString(Object request) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(request);
 	}
