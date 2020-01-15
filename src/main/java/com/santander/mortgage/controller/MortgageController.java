@@ -37,6 +37,10 @@ import com.santander.mortgage.service.ValuationService;
 public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
+
+	@Autowired
+	private ValuationService valuationService;
+
 	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
 
 	@GetMapping("/confirmMortgage/{userId}")
@@ -98,11 +102,6 @@ public class MortgageController {
 	 * return new ResponseEntity<>(confirmMortgageResponseDto, HttpStatus.OK); }
 	 */
 
-	// @GetMapping("get-data")
-	// public String getData() {
-	// return proxy.sayHello();
-	// }
-
 	@GetMapping("/mortgageOptions")
 	public ResponseEntity<List<MortgageOptionsResponseDto>> mortgageOptions() {
 		List<MortgageOptionsResponseDto> mortgageOptionsResponseDtoList = null;
@@ -115,23 +114,6 @@ public class MortgageController {
 
 		return new ResponseEntity<>(mortgageOptionsResponseDtoList, HttpStatus.OK);
 	}
-
-	// @Autowired
-	// private RegistrationProxy proxy;
-
-	@Autowired
-	private ValuationService valuationService;
-
-	/*
-	 * @GetMapping("get-data") public String getData() { return
-	 * proxy.sayHello(); }
-	 */
-	//
-	// @GetMapping("valuation")
-	// public String getValuation() {
-	// return proxy.sayHi();
-	// }
-	//
 
 	@PostMapping("/valuation")
 	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
