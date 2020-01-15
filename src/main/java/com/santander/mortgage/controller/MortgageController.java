@@ -64,7 +64,7 @@ public class MortgageController {
 		logger.info("Inside Property Details method: --");
 		System.out.println(mortgageRequestDto.getNumberOfBedrooms());
 		MortgageResponseDto mortgageResponseDto = mortgageService.savePropertyDetails(mortgageRequestDto);
-		return new ResponseEntity<>(mortgageResponseDto, HttpStatus.OK);
+		return new ResponseEntity<MortgageResponseDto>(mortgageResponseDto, HttpStatus.OK);
 
 	}
 
@@ -79,7 +79,7 @@ public class MortgageController {
 				System.out.println("Error Message : No Record found for this User Id " + userId);
 			}
 		}
-		return new ResponseEntity<>(propertyDetailsDto, HttpStatus.OK);
+		return new ResponseEntity<PropertyDetailsDto>(propertyDetailsDto, HttpStatus.OK);
 	}
 
 	/*
@@ -138,7 +138,7 @@ public class MortgageController {
 
 		ValuationResponseDto valuationResponseDto = valuationService.postValuation(valuationRequestDto);
 
-		return new ResponseEntity<>(valuationResponseDto, HttpStatus.OK);
+		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
 
 	}
 
@@ -153,7 +153,7 @@ public class MortgageController {
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
-		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
+		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
 
 }
