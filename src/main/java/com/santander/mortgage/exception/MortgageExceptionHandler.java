@@ -23,9 +23,18 @@ public class MortgageExceptionHandler {
 		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<ErrorResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@ExceptionHandler(UserNotFoundException.class)
 	public final ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+		ErrorResponse exceptionResponse = new ErrorResponse();
+		exceptionResponse.setMessage(ex.getMessage());
+		exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ErrorResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(PaymentDetailsNotFoundException.class)
+	public final ResponseEntity<ErrorResponse> handlePaymentDetailsNotFoundException(
+			PaymentDetailsNotFoundException ex) {
 		ErrorResponse exceptionResponse = new ErrorResponse();
 		exceptionResponse.setMessage(ex.getMessage());
 		exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());

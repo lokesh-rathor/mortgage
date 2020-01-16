@@ -7,6 +7,8 @@ public class MortgageRequestDto {
 	
 	private Long propertyId;
 	
+	private String postCode;
+	
 	private Long userId;
 	
 	private String propertyAddress;
@@ -96,6 +98,14 @@ public class MortgageRequestDto {
 
 	public void setPropertyId(Long propertyId) {
 		this.propertyId = propertyId;
+	}
+
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 	
 	

@@ -14,8 +14,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.dto.UserRegistration;
 import com.santander.mortgage.model.PaymentDetails;
-import com.santander.mortgage.model.UserRegistration;
 import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.repository.PaymentDetailsRepository;
 import com.santander.mortgage.serviceImpl.MortgageServiceImpl;
@@ -45,7 +45,7 @@ class TestPaymentDetailsService {
 		
 		PaymentDetails paymentDetails = new PaymentDetails();
 		paymentDetails.setAccountHolderName("asdfaf");
-		paymentDetails.setUser(userRegistration);
+		paymentDetails.setUserId(1L);
 		
 		Mockito.when(paymentDetailsRepository.save(Mockito.any(PaymentDetails.class))).thenReturn(paymentDetails);
 		PaymentDetailsResponseDto paymentDetailsResponseDto=new PaymentDetailsResponseDto();
@@ -62,10 +62,7 @@ class TestPaymentDetailsService {
 		
 		PaymentDetailsRequestDto paymentDetailsRequestDto = new PaymentDetailsRequestDto();
 		paymentDetailsRequestDto.setUserId(145L);
-		
-		UserRegistration userRegistration=new UserRegistration();
-		userRegistration.setUserId(145L);
-		
+	
 		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenThrow(RuntimeException.class);
 		
 		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto));

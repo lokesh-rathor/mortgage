@@ -1,43 +1,25 @@
-package com.santander.mortgage.model;
+package com.santander.mortgage.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+public class GetPaymentDetailResponseDto {
 
-@Table(name="PaymentDetails")
-@Entity
-public class PaymentDetails {
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Integer PaymentId;
+	private Integer paymentId;
 	
-	@Column(name = "userId")
-	private Long userId;
-	
-	@Column(name="currentcircumstances")
 	private Integer currentcircumstances;
 	
-	@Column(name="sortCode")
 	private Long sortCode;
 	
-	@Column(name="accountNumber")
 	private Long accountNumber;
 	
-	@Column(name="accountHolderName")
 	private String accountHolderName;
 	
-	@Column(name="dayOfPayment")
 	private Integer dayOfPayment;
 
 	public Integer getPaymentId() {
-		return PaymentId;
+		return paymentId;
 	}
 
 	public void setPaymentId(Integer paymentId) {
-		PaymentId = paymentId;
+		this.paymentId = paymentId;
 	}
 
 	public Integer getCurrentcircumstances() {
@@ -76,16 +58,8 @@ public class PaymentDetails {
 		return dayOfPayment;
 	}
 
-	public void setDayOfPayment(Integer dayOfPayment) { 
+	public void setDayOfPayment(Integer dayOfPayment) {
 		this.dayOfPayment = dayOfPayment;
 	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
+	
 }

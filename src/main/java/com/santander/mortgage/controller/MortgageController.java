@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
+import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
@@ -39,10 +40,17 @@ public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
 
+//<<<<<<< HEAD
+//	// @GetMapping("get-data")
+//	// public String getData() {
+//	// return proxy.sayHello();
+//	// } 
+//=======
 	@Autowired
 	private ValuationService valuationService;
 
 	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
+
 
 	@GetMapping("/confirmMortgage/{userId}")
 	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId) {
@@ -133,6 +141,12 @@ public class MortgageController {
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
 		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getPaymentDetailsById/{userId}")
+	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
+		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
+		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
 	}
 
 }

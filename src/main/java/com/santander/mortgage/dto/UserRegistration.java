@@ -1,45 +1,24 @@
-package com.santander.mortgage.model;
+package com.santander.mortgage.dto;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Table(name="userregistration")
-@Entity
 public class UserRegistration {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="UserId")
 	private Long userId;
 	
-	@Column(name="Password")
 	private String password;
 	
-	@Column(name="FirstName")
 	private String firstName;
 	
-	@Column(name="LastName")
 	private String lastName;
 	
-	@Column(name="DateOfBirth")
 	private Date dateOfBirth;
 	
-	@Column(name="Email", unique=true)
 	private String email;
 	
-	
-	@Column(name="ForgetPasswordQ")
 	private String forgetPasswordQ;
 	
-	@Column(name="ForgetPasswordA")
 	private String forgetPasswordA;
-
 
 	public Long getUserId() {
 		return userId;

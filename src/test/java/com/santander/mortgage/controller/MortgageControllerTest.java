@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,16 +19,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.PropertyDetailsDto;
-import com.santander.mortgage.dto.ValuationRequestDto;
-import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
-import com.santander.mortgage.model.UserRegistration;
+import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.UserRegistration;
+import com.santander.mortgage.dto.ValuationRequestDto;
+import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
@@ -49,45 +52,27 @@ public class MortgageControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-//	@Test
-//	public void testPostValuation() throws Exception {
-//		ValuationRequestDto request = new ValuationRequestDto();
-//		request.setContactName("nrj");
-//		request.setContactNumber(5658846);
-//		request.setContactPerson("Current Account");
-//		request.setIsPropertyInScotland(0);
-//		
-//		String requestJson = jsonToString(request);  
-//
-//		ValuationResponseDto response = new ValuationResponseDto();
-//		response.setMessage("Added Successfully");
-//		response.setUserId(2L);
-//		
-//		when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
-//
-//		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
-//		.andExpect(status().is(200));
-//
-//	}
+	@Test
+	@Disabled
+	public void testPostValuation() throws Exception {
+		ValuationRequestDto request = new ValuationRequestDto();
+		request.setContactName("nrj");
+		request.setContactNumber(5658846);
+		request.setContactPerson("Current Account");
+		// request.setIsPropertyInScotland(0);
 
-	/*
-	 * @MockBean private PropertyDetailsRepository propertyDetailsRepository;
-	 */
+		String requestJson = jsonToString(request);
 
-	/*
-	 * @Before public void setUp() { PropertyDetailsDto propertyDetails = new
-	 * PropertyDetailsDto(); propertyDetails.setUserId((long) 123);
-	 * 
-	 * Mockito.when(mortgageService.getPropertyDetailsById(propertyDetails.getUserId
-	 * ())) .thenReturn(propertyDetails); }
-	 * 
-	 * 
-	 * @Test public void getPropertyByIdNotFoundTest() { Long userId = 123L;
-	 * PropertyDetailsDto found = mortgageService.getPropertyDetailsById((long)
-	 * userId);
-	 * 
-	 * assertThat(found.getUserId()) .isEqualTo(userId); }
-	 */
+		ValuationResponseDto response = new ValuationResponseDto();
+		response.setMessage("Added Successfully");
+		response.setUserId(2L);
+
+		//when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
+
+		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+				.andExpect(status().is(200));
+
+	}
 
 	@Test
 	public void testPaymentDetails() throws Exception {
@@ -153,7 +138,7 @@ public class MortgageControllerTest {
 		mortgageRequestDto.setIsPropertyCovered("Y");
 		mortgageRequestDto.setTenureType("100 years");
 
-		String request = this.mapper(mortgageRequestDto);
+		String request = this.jsonToString(mortgageRequestDto);
 
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails")
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andReturn();
@@ -195,16 +180,10 @@ public class MortgageControllerTest {
 		mortgageRequestDto.setIsPropertyCovered("Yes");
 		mortgageRequestDto.setTenureType(null);
 
-		String request = this.mapper(mortgageRequestDto);
+		String request = this.jsonToString(mortgageRequestDto);
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/propertyDetails")
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isBadRequest());
-	}
-
-	private String mapper(MortgageRequestDto mortgageRequestDto) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String request = objectMapper.writeValueAsString(mortgageRequestDto);
-		return request;
 	}
 
 	private PropertyDetailsDto getPropertyById() {

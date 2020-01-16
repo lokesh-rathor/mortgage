@@ -11,12 +11,7 @@ public class PropertyDetailsDto {
 	
 	private Long userId;
 	private Long propertyId;
-	public Long getPropertyId() {
-		return propertyId;
-	}
-	public void setPropertyId(Long propertyId) {
-		this.propertyId = propertyId;
-	}
+	
 	private String propertyAddress;
 	private String propertyType;
 	private int numberOfBedrooms;
@@ -24,6 +19,9 @@ public class PropertyDetailsDto {
 	private int propertyAge;
 	private String isPropertyCovered; 
 	private String tenureType;
+	private String postCode;
+
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -72,6 +70,17 @@ public class PropertyDetailsDto {
 	public void setTenureType(String tenureType) {
 		this.tenureType = tenureType;
 	}
-	
+	public String getPostCode() {
+		return postCode;
+	}
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+	public Long getPropertyId() {
+		return propertyId;
+	}
+	public void setPropertyId(Long propertyId) {
+		this.propertyId = propertyId;
+	}
 	
 }
