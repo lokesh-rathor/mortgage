@@ -5,10 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.santander.mortgage.model.Valuation;
 
+import feign.Param;
+
 @Repository
 public interface ValuationRepository extends JpaRepository<Valuation,Integer>{
 
-	public Valuation getValuation(Long userId);
+	public Valuation findByUserId(@Param(value = "UserId") Long userId);
 
 	
 

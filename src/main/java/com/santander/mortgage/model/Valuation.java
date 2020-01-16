@@ -16,7 +16,7 @@ public class Valuation {
 	@Column(name = "UserId")
 	private Long userId;
 	@Column(name = "IsPropertyInScotland")
-	private Integer isPropertyInScotland;
+	private Boolean isPropertyInScotland;
 	@Column(name = "ContactPerson")
 	private String contactPerson;
 	@Column(name = "ContactName")
@@ -33,11 +33,13 @@ public class Valuation {
 		this.userId = userId;
 	}
 
-	public Integer getIsPropertyInScotland() {
+
+
+	public Boolean getIsPropertyInScotland() {
 		return isPropertyInScotland;
 	}
 
-	public void setIsPropertyInScotland(Integer isPropertyInScotland) {
+	public void setIsPropertyInScotland(Boolean isPropertyInScotland) {
 		this.isPropertyInScotland = isPropertyInScotland;
 	}
 

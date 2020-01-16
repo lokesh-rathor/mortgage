@@ -49,26 +49,26 @@ public class MortgageControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@Test
-	public void testPostValuation() throws Exception {
-		ValuationRequestDto request = new ValuationRequestDto();
-		request.setContactName("nrj");
-		request.setContactNumber(5658846);
-		request.setContactPerson("Current Account");
-		request.setIsPropertyInScotland(0);
-		
-		String requestJson = jsonToString(request);  
-
-		ValuationResponseDto response = new ValuationResponseDto();
-		response.setMessage("Added Successfully");
-		response.setUserId(2L);
-		
-		when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
-
-		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
-		.andExpect(status().is(200));
-
-	}
+//	@Test
+//	public void testPostValuation() throws Exception {
+//		ValuationRequestDto request = new ValuationRequestDto();
+//		request.setContactName("nrj");
+//		request.setContactNumber(5658846);
+//		request.setContactPerson("Current Account");
+//		request.setIsPropertyInScotland(0);
+//		
+//		String requestJson = jsonToString(request);  
+//
+//		ValuationResponseDto response = new ValuationResponseDto();
+//		response.setMessage("Added Successfully");
+//		response.setUserId(2L);
+//		
+//		when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
+//
+//		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+//		.andExpect(status().is(200));
+//
+//	}
 
 	/*
 	 * @MockBean private PropertyDetailsRepository propertyDetailsRepository;

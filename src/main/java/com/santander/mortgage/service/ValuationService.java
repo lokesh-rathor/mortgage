@@ -7,7 +7,7 @@ import com.santander.mortgage.dto.ValuationResponseDto;
 
 public interface ValuationService {
 	
-	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto);
+	public ValuationRequestDto postValuation(ValuationRequestDto valuationRequestDto);
 
 	public ValuationRequestDto getValuation(Long userId);
 

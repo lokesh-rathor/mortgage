@@ -109,9 +109,9 @@ public class MortgageController {
 	}
 
 	@PostMapping("/valuation")
-	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
-		ValuationResponseDto valuationResponseDto = valuationService.postValuation(valuationRequestDto);
-		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
+	ResponseEntity<ValuationRequestDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
+		ValuationRequestDto valuationRequestDto2 = valuationService.postValuation(valuationRequestDto);
+		return new ResponseEntity<ValuationRequestDto>(valuationRequestDto2, HttpStatus.OK);
 	}
 	
 	@GetMapping("/valuation/{userId}")

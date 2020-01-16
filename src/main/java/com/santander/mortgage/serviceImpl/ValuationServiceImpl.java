@@ -19,7 +19,7 @@ public class ValuationServiceImpl implements ValuationService {
 	private ValuationRepository valuationRespository;
 
 	@Override
-	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto) {
+	public ValuationRequestDto postValuation(ValuationRequestDto valuationRequestDto) {
 		
 		Valuation valuation = new Valuation();
 		valuation.setContactName(valuationRequestDto.getContactName());
@@ -29,11 +29,11 @@ public class ValuationServiceImpl implements ValuationService {
 		
 		valuation = valuationRespository.save(valuation);
 		
-		ValuationResponseDto valuationResponseDto = new ValuationResponseDto();
-		valuationResponseDto.setUserId(valuation.getUserId());
-		valuationResponseDto.setMessage("Valuation details added");
+//		ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
+//		valuationRequestDto.setUserId(valuation.getUserId());
+//		valuationRequestDto.setMessage("Valuation details added");
 		
-		return valuationResponseDto;
+		return valuationRequestDto;
 	}
 
 //	ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
@@ -84,16 +84,16 @@ public class ValuationServiceImpl implements ValuationService {
 
 	@Override
 	public ValuationRequestDto getValuation(Long userId) {
-		Valuation valuation = valuationRespository.getValuation(userId);
+		Valuation valuation = valuationRespository.findByUserId(userId);
 		if (valuation == null) {
 			throw new UserNotFoundException("User not found");
 		}
 		
 		ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
-		valuationRequestDto.setContactName(valuationRequestDto.getContactName());
-		valuationRequestDto.setContactName(valuationRequestDto.getContactPerson());
-		valuationRequestDto.setContactNumber(valuationRequestDto.getContactNumber());
-		valuationRequestDto.setIsPropertyInScotland(valuationRequestDto.getIsPropertyInScotland());
+		valuationRequestDto.setContactName(valuation.getContactName());
+		valuationRequestDto.setContactPerson(valuation.getContactPerson());
+		valuationRequestDto.setContactNumber(valuation.getContactNumber());
+		valuationRequestDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
 		return valuationRequestDto;
      
 	}
