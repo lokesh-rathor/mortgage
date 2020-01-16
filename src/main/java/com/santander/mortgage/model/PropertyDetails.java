@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "PropertyDetails")
+
 @Entity
 public class PropertyDetails {
 
@@ -39,6 +40,7 @@ public class PropertyDetails {
 
 	@Column(name = "isPropertyCovered")
 	private String isPropertyCovered;
+
 	@Column(name = "TenureType")
 	private String tenureType;
 

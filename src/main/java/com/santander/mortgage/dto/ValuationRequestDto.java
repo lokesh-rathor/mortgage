@@ -2,15 +2,16 @@ package com.santander.mortgage.dto;
 
 public class ValuationRequestDto {
 	
-	private Integer isPropertyInScotland;
+	private Boolean isPropertyInScotland;
 	private String contactPerson;
 	private String contactName;
 	private Integer contactNumber;
 	
-	public Integer getIsPropertyInScotland() {
+
+	public Boolean getIsPropertyInScotland() {
 		return isPropertyInScotland;
 	}
-	public void setIsPropertyInScotland(Integer isPropertyInScotland) {
+	public void setIsPropertyInScotland(Boolean isPropertyInScotland) {
 		this.isPropertyInScotland = isPropertyInScotland;
 	}
 	public String getContactPerson() {
