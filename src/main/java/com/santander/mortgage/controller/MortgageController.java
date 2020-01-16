@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
+import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.PropertyDetailsDto;
-import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
-import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
-import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
+import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin
@@ -137,7 +137,7 @@ public class MortgageController {
 	}
 	
 	@GetMapping("/getPaymentDetailsById/{userId}")
-	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) throws PaymentDetailsNotFoundException {
+	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
 		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
 		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
 	}

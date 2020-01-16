@@ -1,6 +1,6 @@
 package com.santander.mortgage.exception;
 
-public class PaymentDetailsNotFoundException extends Exception{
+public class PaymentDetailsNotFoundException extends RuntimeException{
 
 	/**
 	 * 

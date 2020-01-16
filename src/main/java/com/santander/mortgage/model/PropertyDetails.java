@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
 @Table(name="PropertyDetails")
 @Entity
 public class PropertyDetails {
@@ -18,15 +16,6 @@ public class PropertyDetails {
 	@Column(name="property_id")
 	private Long propertyId;
 	
-	
-	public Long getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(Long propertyId) {
-		this.propertyId = propertyId;
-	}
-
 	@Column(name="UserId")
 	private Long userId;
 	
@@ -48,19 +37,21 @@ public class PropertyDetails {
 	@Column(name="PropertyAge")
 	private int propertyAge;
 	
-	public String getPostCode() {
-		return postCode;
-	}
-
-	public void setPostCode(String postCode) {
-		this.postCode = postCode;
-	}
 
 	@Column(name="isPropertyCovered")
 	private String isPropertyCovered; 
+	
 	@Column(name="TenureType")
 	private String tenureType;
-	
+
+	public Long getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(Long propertyId) {
+		this.propertyId = propertyId;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -75,6 +66,14 @@ public class PropertyDetails {
 
 	public void setPropertyAddress(String propertyAddress) {
 		this.propertyAddress = propertyAddress;
+	}
+
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	public String getPropertyType() {
@@ -124,6 +123,5 @@ public class PropertyDetails {
 	public void setTenureType(String tenureType) {
 		this.tenureType = tenureType;
 	}
-
 	
 }
