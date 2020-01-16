@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import com.santander.mortgage.model.PaymentDetails;
 
+import feign.Param;
+
 @Repository
-public interface PaymentDetailsRepository extends JpaRepository<PaymentDetails, Long>{
+public interface PaymentDetailsRepository extends JpaRepository<PaymentDetails, Long> {
+
+	public PaymentDetails findByUserId(@Param("userId") Long userId);
 
 }

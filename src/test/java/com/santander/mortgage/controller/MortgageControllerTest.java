@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,16 +18,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.PropertyDetailsDto;
-import com.santander.mortgage.dto.ValuationRequestDto;
-import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
-import com.santander.mortgage.model.UserRegistration;
+import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.UserRegistration;
+import com.santander.mortgage.dto.ValuationRequestDto;
+import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 

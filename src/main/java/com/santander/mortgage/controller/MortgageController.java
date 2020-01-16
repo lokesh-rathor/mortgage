@@ -27,7 +27,9 @@ import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
+import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
+import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin
@@ -132,6 +134,12 @@ public class MortgageController {
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
 		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getPaymentDetailsById/{userId}")
+	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) throws PaymentDetailsNotFoundException {
+		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
+		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
 	}
 
 }

@@ -8,18 +8,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
+import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.UserRegistration;
+import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.exception.UserNotFoundException;
 import com.santander.mortgage.model.ConfirmMortgageDetails;
 import com.santander.mortgage.model.MortgageOptionsDetail;
 import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.PropertyDetails;
-import com.santander.mortgage.model.UserRegistration;
 import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.repository.ConfirmMortgageRepository;
 import com.santander.mortgage.repository.MortgageOptionsRepository;
@@ -46,7 +48,7 @@ public class MortgageServiceImpl implements MortgageService {
 	private RegistrationProxy registrationProxy;
 
 	@Override
-	public ConfirmMortgageResponseDto confirmMortgage(Long userId) { 
+	public ConfirmMortgageResponseDto confirmMortgage(Long userId) {
 		ConfirmMortgageDetails confirmMortgageDetails = confirmMortgageRepository.findByUserId(userId);
 		if (confirmMortgageDetails == null) {
 			throw new UserNotFoundException("User not found");
@@ -69,12 +71,11 @@ public class MortgageServiceImpl implements MortgageService {
 		return confirmMortgageResponseDto;
 	}
 
+	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto) {
 
-	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto){
-		
 		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(mortgageRequestDto.getUserId());
-		
-		if(propertyDetails == null) {
+
+		if (propertyDetails == null) {
 			PropertyDetails propertyDetail = new PropertyDetails();
 			propertyDetail.setUserId(mortgageRequestDto.getUserId());
 			propertyDetail.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
@@ -85,7 +86,7 @@ public class MortgageServiceImpl implements MortgageService {
 			propertyDetail.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
 			propertyDetail.setTenureType(mortgageRequestDto.getTenureType());
 			propertyDetail.setPostCode(mortgageRequestDto.getPostCode());
-			propertyDetails=propertyDetailsRepository.save(propertyDetail);
+			propertyDetails = propertyDetailsRepository.save(propertyDetail);
 
 		} else {
 			propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
@@ -96,7 +97,7 @@ public class MortgageServiceImpl implements MortgageService {
 			propertyDetails.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
 			propertyDetails.setTenureType(mortgageRequestDto.getTenureType());
 			propertyDetails.setPostCode(mortgageRequestDto.getPostCode());
-			propertyDetails=propertyDetailsRepository.save(propertyDetails);
+			propertyDetails = propertyDetailsRepository.save(propertyDetails);
 
 		}
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
@@ -104,7 +105,7 @@ public class MortgageServiceImpl implements MortgageService {
 		mortgageResponseDto.setMessage("Property Details saved successfully");
 
 		return mortgageResponseDto;
-		
+
 	}
 
 	/*
@@ -159,25 +160,26 @@ public class MortgageServiceImpl implements MortgageService {
 		}).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 		return mortgageOptionsResponseDtoList;
 	}
-	
-	  @Override
-	  public PropertyDetailsDto getPropertyDetailsById(Long userId) {
-	  PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(userId);
-	  PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
-	  
-	  System.out.println("In get property");
-	  propertyDetailsDto.setUserId(propertyDetails.getUserId());
-	  propertyDetailsDto.setPostCode(propertyDetails.getPostCode());
-	  propertyDetailsDto.setPropertyId(propertyDetails.getPropertyId());
-	  propertyDetailsDto.setPropertyAddress(propertyDetails.getPropertyAddress());
-	  propertyDetailsDto.setPropertyType(propertyDetails.getPropertyType());
-	  propertyDetailsDto.setNumberOfBedrooms(propertyDetails.getNumberOfBedrooms())
-	  ; propertyDetailsDto.setPropertyBuilt(propertyDetails.getPropertyBuilt());
-	  propertyDetailsDto.setPropertyAge(propertyDetails.getPropertyAge());
-	  propertyDetailsDto.setIsPropertyCovered(propertyDetails.getIsPropertyCovered(
-	  )); propertyDetailsDto.setTenureType(propertyDetails.getTenureType());
-	  
-	  return propertyDetailsDto; }
+
+	@Override
+	public PropertyDetailsDto getPropertyDetailsById(Long userId) {
+		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(userId);
+		PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
+
+		System.out.println("In get property");
+		propertyDetailsDto.setUserId(propertyDetails.getUserId());
+		propertyDetailsDto.setPostCode(propertyDetails.getPostCode());
+		propertyDetailsDto.setPropertyId(propertyDetails.getPropertyId());
+		propertyDetailsDto.setPropertyAddress(propertyDetails.getPropertyAddress());
+		propertyDetailsDto.setPropertyType(propertyDetails.getPropertyType());
+		propertyDetailsDto.setNumberOfBedrooms(propertyDetails.getNumberOfBedrooms());
+		propertyDetailsDto.setPropertyBuilt(propertyDetails.getPropertyBuilt());
+		propertyDetailsDto.setPropertyAge(propertyDetails.getPropertyAge());
+		propertyDetailsDto.setIsPropertyCovered(propertyDetails.getIsPropertyCovered());
+		propertyDetailsDto.setTenureType(propertyDetails.getTenureType());
+
+		return propertyDetailsDto;
+	}
 
 //		propertyDetailsDto.setUserId(propertyDetails.getUserId());
 //		propertyDetailsDto.setPropertyId(propertyDetails.getPropertyId());
@@ -192,14 +194,13 @@ public class MortgageServiceImpl implements MortgageService {
 //		return propertyDetailsDto;
 //	}
 
-
 	@Override
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
 
 		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
 
 		PaymentDetails payment = new PaymentDetails();
-		payment.setUser(user.getBody());
+		payment.setUserId(user.getBody().getUserId());
 		payment.setSortCode(paymentDetailsRequestDto.getSortCode());
 		payment.setAccountHolderName(paymentDetailsRequestDto.getAccountHolderName());
 		payment.setAccountNumber(paymentDetailsRequestDto.getAccountNumber());
@@ -209,9 +210,28 @@ public class MortgageServiceImpl implements MortgageService {
 
 		PaymentDetailsResponseDto paymentDetailsResponseDto = new PaymentDetailsResponseDto();
 		paymentDetailsResponseDto.setMessage("payment done Successfully");
-		paymentDetailsResponseDto.setUserId(paymentDetails.getUser().getUserId());
+		paymentDetailsResponseDto.setUserId(paymentDetails.getUserId());
 
 		return paymentDetailsResponseDto;
+	}
+
+	@Override
+	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) throws PaymentDetailsNotFoundException {
+		PaymentDetails paymentDetailResponseDto = paymentDetailsRepository.findByUserId(userId);
+		if(paymentDetailResponseDto != null) {
+			GetPaymentDetailResponseDto getPaymentDetailResponseDto = new GetPaymentDetailResponseDto();
+			getPaymentDetailResponseDto.setPaymentId(paymentDetailResponseDto.getPaymentId());
+			getPaymentDetailResponseDto.setAccountHolderName(paymentDetailResponseDto.getAccountHolderName());
+			getPaymentDetailResponseDto.setAccountNumber(paymentDetailResponseDto.getAccountNumber());
+			getPaymentDetailResponseDto.setCurrentcircumstances(paymentDetailResponseDto.getCurrentcircumstances());
+			getPaymentDetailResponseDto.setDayOfPayment(paymentDetailResponseDto.getDayOfPayment());
+			getPaymentDetailResponseDto.setSortCode(paymentDetailResponseDto.getSortCode());
+			
+			return getPaymentDetailResponseDto;
+		} else {
+			throw new PaymentDetailsNotFoundException("Payment details not found.");
+		}
+		
 	}
 
 }

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.santander.mortgage.model.UserRegistration;
+import com.santander.mortgage.dto.UserRegistration;
 
 @FeignClient(name="zuul-api-gateway-server")
 @RibbonClient(name="zuul-api-gateway-server")  
