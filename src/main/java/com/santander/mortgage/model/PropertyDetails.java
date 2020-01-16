@@ -7,18 +7,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
-@Table(name="PropertyDetails")
+@Table(name = "PropertyDetails")
 @Entity
 public class PropertyDetails {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="property_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "property_id")
 	private Long propertyId;
-	
-	
+
+	@Column(name = "UserId")
+	private Long userId;
+
+	@Column(name = "PropertyAddress")
+	private String propertyAddress;
+
+	@Column(name = "PostCode")
+	private String postCode;
+
+	@Column(name = "PropertyType")
+	private String propertyType;
+
+	@Column(name = "NumberOfBedrooms")
+	private int numberOfBedrooms;
+
+	@Column(name = "PropertyBuilt")
+	private String propertyBuilt;
+
+	@Column(name = "PropertyAge")
+	private int propertyAge;
+
+	@Column(name = "isPropertyCovered")
+	private String isPropertyCovered;
+	@Column(name = "TenureType")
+	private String tenureType;
+
 	public Long getPropertyId() {
 		return propertyId;
 	}
@@ -27,27 +50,6 @@ public class PropertyDetails {
 		this.propertyId = propertyId;
 	}
 
-	@Column(name="UserId")
-	private Long userId;
-	
-	@Column(name="PropertyAddress")
-	private String propertyAddress;
-	
-	@Column(name="PostCode")
-	private String postCode;
-	
-	@Column(name="PropertyType")
-	private String propertyType;
-	
-	@Column(name="NumberOfBedrooms")
-	private int numberOfBedrooms;
-	
-	@Column(name="PropertyBuilt")
-	private String propertyBuilt; 
-	
-	@Column(name="PropertyAge")
-	private int propertyAge;
-	
 	public String getPostCode() {
 		return postCode;
 	}
@@ -56,11 +58,6 @@ public class PropertyDetails {
 		this.postCode = postCode;
 	}
 
-	@Column(name="isPropertyCovered")
-	private String isPropertyCovered; 
-	@Column(name="TenureType")
-	private String tenureType;
-	
 	public Long getUserId() {
 		return userId;
 	}
@@ -125,5 +122,4 @@ public class PropertyDetails {
 		this.tenureType = tenureType;
 	}
 
-	
 }
