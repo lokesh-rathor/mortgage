@@ -7,7 +7,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-//@ComponentScan("com.santander")
 @EnableFeignClients("com.santander.mortgage")
 public class MortgageApplication {
 

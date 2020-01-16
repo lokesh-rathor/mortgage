@@ -1,5 +1,6 @@
 package com.santander.mortgage.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,9 +13,12 @@ public class PaymentDetailsRequestDto {
 	private Integer currentCircumstances;
 	
 	@NotNull
+	//@Size(min=12)
+	@Min(12)
 	private Long sortCode;
 	
 	@NotNull
+	@Min(12)
 	private Long accountNumber;
 	
 	@NotNull
