@@ -8,4 +8,8 @@ import com.santander.mortgage.model.Valuation;
 @Repository
 public interface ValuationRepository extends JpaRepository<Valuation,Integer>{
 
+	public Valuation getValuation(Long userId);
+
+	
+
 }

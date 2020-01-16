@@ -17,17 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
 import com.santander.mortgage.dto.MortgageRequestDto;
 import com.santander.mortgage.dto.MortgageResponseDto;
-import com.santander.mortgage.dto.PropertyDetailsDto;
-import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
+import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
+import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin
@@ -111,6 +112,13 @@ public class MortgageController {
 	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
 		ValuationResponseDto valuationResponseDto = valuationService.postValuation(valuationRequestDto);
 		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/valuation/{userId}")
+	public ResponseEntity<ValuationRequestDto> getValuation(@PathVariable("userId") Long userId) {
+		ValuationRequestDto valuationRequestDto = null;
+		valuationRequestDto = valuationService.getValuation(userId);
+		return new ResponseEntity<>(valuationRequestDto, HttpStatus.OK);
 	}
 
 	@PostMapping("/payment-details")
