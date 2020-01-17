@@ -7,41 +7,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name="PropertyDetails")
+@Table(name = "PropertyDetails")
+
 @Entity
 public class PropertyDetails {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="property_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "property_id")
 	private Long propertyId;
-	
-	@Column(name="UserId")
-	private Long userId;
-	
-	@Column(name="PropertyAddress")
-	private String propertyAddress;
-	
-	@Column(name="PostCode")
-	private String postCode;
-	
-	@Column(name="PropertyType")
-	private String propertyType;
-	
-	@Column(name="NumberOfBedrooms")
-	private int numberOfBedrooms;
-	
-	@Column(name="PropertyBuilt")
-	private String propertyBuilt; 
-	
-	@Column(name="PropertyAge")
-	private int propertyAge;
-	
 
-	@Column(name="isPropertyCovered")
-	private String isPropertyCovered; 
-	
-	@Column(name="TenureType")
+	@Column(name = "UserId")
+	private Long userId;
+
+	@Column(name = "PropertyAddress")
+	private String propertyAddress;
+
+	@Column(name = "PostCode")
+	private String postCode;
+
+	@Column(name = "PropertyType")
+	private String propertyType;
+
+	@Column(name = "NumberOfBedrooms")
+	private int numberOfBedrooms;
+
+	@Column(name = "PropertyBuilt")
+	private String propertyBuilt;
+
+	@Column(name = "PropertyAge")
+	private int propertyAge;
+
+	@Column(name = "isPropertyCovered")
+	private String isPropertyCovered;
+
+	@Column(name = "TenureType")
 	private String tenureType;
 
 	public Long getPropertyId() {
@@ -50,6 +50,14 @@ public class PropertyDetails {
 
 	public void setPropertyId(Long propertyId) {
 		this.propertyId = propertyId;
+	}
+
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	public Long getUserId() {
@@ -66,14 +74,6 @@ public class PropertyDetails {
 
 	public void setPropertyAddress(String propertyAddress) {
 		this.propertyAddress = propertyAddress;
-	}
-
-	public String getPostCode() {
-		return postCode;
-	}
-
-	public void setPostCode(String postCode) {
-		this.postCode = postCode;
 	}
 
 	public String getPropertyType() {
@@ -123,5 +123,5 @@ public class PropertyDetails {
 	public void setTenureType(String tenureType) {
 		this.tenureType = tenureType;
 	}
-	
+
 }

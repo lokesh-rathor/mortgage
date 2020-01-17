@@ -3,25 +3,24 @@ package com.santander.mortgage.dto;
 import javax.validation.constraints.NotNull;
 
 public class MortgageRequestDto {
-	
-	
+
 	private Long propertyId;
-	
+
 	private String postCode;
-	
+
 	private Long userId;
-	
+
 	private String propertyAddress;
-	
+
 	private String propertyType;
-	
+
 	private Integer numberOfBedrooms;
-	
-	private String propertyBuilt; 
-	
+
+	private String propertyBuilt;
+
 	private Integer propertyAge;
-	
-	private String isPropertyCovered; 
+
+	private String isPropertyCovered;
 	@NotNull
 	private String tenureType;
 
@@ -49,8 +48,6 @@ public class MortgageRequestDto {
 		this.propertyType = propertyType;
 	}
 
-	
-
 	public String getPropertyBuilt() {
 		return propertyBuilt;
 	}
@@ -58,7 +55,6 @@ public class MortgageRequestDto {
 	public void setPropertyBuilt(String propertyBuilt) {
 		this.propertyBuilt = propertyBuilt;
 	}
-
 
 	public String getIsPropertyCovered() {
 		return isPropertyCovered;
@@ -107,7 +103,5 @@ public class MortgageRequestDto {
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
 	}
-	
-	
 
 }
