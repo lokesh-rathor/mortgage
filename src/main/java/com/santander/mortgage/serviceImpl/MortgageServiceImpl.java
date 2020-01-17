@@ -49,7 +49,7 @@ public class MortgageServiceImpl implements MortgageService {
 	private RegistrationProxy registrationProxy;
 
 	@Override
-    @Cacheable(value="mortgageCache")
+	 @Cacheable(value="mortgageConfirmCache")
 	public ConfirmMortgageResponseDto confirmMortgage(Long userId) {
 		ConfirmMortgageDetails confirmMortgageDetails = confirmMortgageRepository.findByUserId(userId);
 		if (confirmMortgageDetails == null) {
@@ -111,7 +111,7 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-    @Cacheable(value="mortgageCache")
+	@Cacheable(value="mortgageOptionsCache")
 	public List<MortgageOptionsResponseDto> mortgageOptions() {
 		List<MortgageOptionsDetail> mortgageOptionsDetailList = mortgageOptionsRepository.findAll();
 		List<MortgageOptionsResponseDto> mortgageOptionsResponseDtoList = mortgageOptionsDetailList.stream().map(e -> {
@@ -126,7 +126,7 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-    @Cacheable(value="mortgageCache")
+	@Cacheable(value = "mortgagePropertyCache")
 	public PropertyDetailsDto getPropertyDetailsById(Long userId) {
 		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(userId);
 		PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
@@ -171,12 +171,12 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-	@Cacheable(value="mortgageCache")
-	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId)   {
+	@Cacheable(value = "mortgagePaymentCache")//, key = "T(java.util.Objects).hash(#p0,#p1, #p2)")
+	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) {
 		PaymentDetails paymentDetailResponseDto = paymentDetailsRepository.findByUserId(userId);
 		if (paymentDetailResponseDto == null) {
 			throw new PaymentDetailsNotFoundException("Payment details not found.");
-		} 
+		}
 		GetPaymentDetailResponseDto getPaymentDetailResponseDto = new GetPaymentDetailResponseDto();
 		getPaymentDetailResponseDto.setPaymentId(paymentDetailResponseDto.getPaymentId());
 		getPaymentDetailResponseDto.setAccountHolderName(paymentDetailResponseDto.getAccountHolderName());

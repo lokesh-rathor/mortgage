@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -48,6 +49,9 @@ public class MortgageController {
 //=======
 	@Autowired
 	private ValuationService valuationService;
+	
+	@Autowired
+    private CacheManager cacheManager; 
 
 	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
 
@@ -141,5 +145,14 @@ public class MortgageController {
 		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
 		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
 	}
+	
+	// clear all cache using cache manager
+    @RequestMapping(value = "clearCache")
+    public void clearCache(){
+        for(String name:cacheManager.getCacheNames()){
+        	System.out.println(cacheManager.getCache(name));
+            cacheManager.getCache(name).clear();            // clear cache by name
+        }
+    }
 
 }

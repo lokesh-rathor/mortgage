@@ -1,7 +1,6 @@
 package com.santander.mortgage.model;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +9,7 @@ import javax.persistence.Table;
 @Table(name="ConfirmMortgageDetails")
 @Entity
 public class ConfirmMortgageDetails {
+	
 	@Id
 	@Column(name="Id")
 	private Long Id;
@@ -156,6 +156,5 @@ public class ConfirmMortgageDetails {
 	public void setProductFeeAddedToLoanAmt(int productFeeAddedToLoanAmt) {
 		this.productFeeAddedToLoanAmt = productFeeAddedToLoanAmt;
 	}
-	
 	
 }
