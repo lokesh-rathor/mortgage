@@ -235,7 +235,8 @@ public class MortgageServiceImpl implements MortgageService {
 		valuationResponseDto.setContactNumber(valuation.getContactNumber());
 		valuationResponseDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
 		valuationResponseDto.setValuationId(valuation.getContactNumber());
-
+		valuationResponseDto.setUserId(valuation.getUserId());
+		
 		return valuationResponseDto;
      
 	}

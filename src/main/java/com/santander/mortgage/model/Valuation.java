@@ -17,7 +17,7 @@ public class Valuation {
 	private Long valuationId;
 	
 	@Column(name = "UserId")
-	private String userId;
+	private Long userId;
 	@Column(name = "IsPropertyInScotland")
 	private Integer isPropertyInScotland;
 	@Column(name = "ContactPerson")
@@ -26,17 +26,22 @@ public class Valuation {
 	private String contactName;
 	@Column(name = "ContactNumber")
 	private Long contactNumber;
-	
 
-	public String getUserId() {
+	public Long getValuationId() {
+		return valuationId;
+	}
+
+	public void setValuationId(Long valuationId) {
+		this.valuationId = valuationId;
+	}
+
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-
 
 	public Integer getIsPropertyInScotland() {
 		return isPropertyInScotland;

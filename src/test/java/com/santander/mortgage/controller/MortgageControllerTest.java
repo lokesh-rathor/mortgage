@@ -77,14 +77,14 @@ public class MortgageControllerTest {
 	  response.setContactNumber(8285619131L);
 	  response.setContactPerson("Rahul");
 	  response.setIsPropertyInScotland(1);
-	  response.setUserId("devneeraj@mail.com");
+	  response.setUserId(1L);
 	  
 	  ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
 	  valuationRequestDto.setContactName("amit");
 	  valuationRequestDto.setContactNumber(8285619131L);
 	  valuationRequestDto.setContactPerson("Rahul");
 	  valuationRequestDto.setIsPropertyInScotland(1);
-	  valuationRequestDto.setUserId("devneeraj@mail.com");
+	  valuationRequestDto.setUserId(1L);
 	  
 	  when(mortgageService.postValuation(Mockito.any(ValuationRequestDto.class))).
 	  thenReturn(response);

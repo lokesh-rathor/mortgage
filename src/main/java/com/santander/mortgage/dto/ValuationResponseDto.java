@@ -2,7 +2,7 @@ package com.santander.mortgage.dto;
 
 public class ValuationResponseDto {
 
-	private String userId;
+	private Long userId;
 	private Integer isPropertyInScotland;
 	private String contactPerson;
 	private String contactName;
@@ -22,10 +22,11 @@ public class ValuationResponseDto {
 	public void setValuationId(Long valuationId) {
 		this.valuationId = valuationId;
 	}
-	public String getUserId() {
+	
+	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	public Integer getIsPropertyInScotland() {

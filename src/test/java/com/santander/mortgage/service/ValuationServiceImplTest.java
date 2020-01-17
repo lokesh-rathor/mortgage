@@ -41,12 +41,12 @@ public class ValuationServiceImplTest {
 		valuation.setContactNumber(321546768L);
 		valuation.setContactPerson("contactPerson");
 		valuation.setIsPropertyInScotland(1);
-		valuation.setUserId("amitThakur@mail.com");
+		valuation.setUserId(1L);
 		
 		
 		ValuationResponseDto valuationResponseDto = new ValuationResponseDto();
 		valuationResponseDto.setMessage("Added Successfully");
-		valuationResponseDto.setUserId("amitThakur@mail.com");
+		valuationResponseDto.setUserId(1L);
 		
 		Mockito.when(valuationRepository.save(Mockito.any(Valuation.class))).thenReturn(valuation);
 		ValuationResponseDto valuationResponse = valuationService.postValuation(valuationRequestDto);

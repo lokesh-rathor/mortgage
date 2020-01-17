@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 public class ValuationRequestDto {
 	
 	@NotNull
-	private String userId;
+	private Long userId;
 	@NotNull
 	private Integer isPropertyInScotland;
 	@NotNull
@@ -16,8 +16,16 @@ public class ValuationRequestDto {
 	private String contactName;
 	@NotNull
 	private Long contactNumber;
-	
 
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	public void setIsPropertyInScotland(Integer isPropertyInScotland) {
+		this.isPropertyInScotland = isPropertyInScotland;
+	}
 	public Integer getIsPropertyInScotland() {
 		return isPropertyInScotland;
 	}
@@ -43,12 +51,4 @@ public class ValuationRequestDto {
 		this.contactNumber = contactNumber;
 	}
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
-
 }
