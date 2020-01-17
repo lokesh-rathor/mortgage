@@ -31,7 +31,6 @@ import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
 import com.santander.mortgage.service.MortgageService;
-import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin
 @RestController
@@ -47,8 +46,7 @@ public class MortgageController {
 //	// return proxy.sayHello();
 //	// } 
 //=======
-	@Autowired
-	private ValuationService valuationService;
+	
 	
 	@Autowired
     private CacheManager cacheManager; 
@@ -121,16 +119,21 @@ public class MortgageController {
 	}
 
 	@PostMapping("/valuation")
-	ResponseEntity<ValuationRequestDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
-		ValuationRequestDto valuationRequestDto2 = valuationService.postValuation(valuationRequestDto);
-		return new ResponseEntity<ValuationRequestDto>(valuationRequestDto2, HttpStatus.OK);
+	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody @Valid ValuationRequestDto valuationRequestDto, Errors errors) {
+		
+		if(errors.hasErrors()) {
+			throw new InvalidInputException("Invalid Input.");
+		}
+		
+		ValuationResponseDto valuationResponseDto = mortgageService.postValuation(valuationRequestDto);
+		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/valuation/{userId}")
-	public ResponseEntity<ValuationRequestDto> getValuation(@PathVariable("userId") Long userId) {
-		ValuationRequestDto valuationRequestDto = null;
-		valuationRequestDto = valuationService.getValuation(userId);
-		return new ResponseEntity<>(valuationRequestDto, HttpStatus.OK);
+	public ResponseEntity<ValuationResponseDto> getValuation(@PathVariable("userId") Long userId) {
+		ValuationResponseDto valuationResponseDto = null;
+		valuationResponseDto = mortgageService.getValuation(userId);
+		return new ResponseEntity<>(valuationResponseDto, HttpStatus.OK);
 	}
 
 	@PostMapping("/payment-details")

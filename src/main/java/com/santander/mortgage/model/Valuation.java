@@ -13,33 +13,36 @@ public class Valuation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="valuationId")
+	private Long valuationId;
+	
 	@Column(name = "UserId")
-	private Long userId;
+	private String userId;
 	@Column(name = "IsPropertyInScotland")
-	private Boolean isPropertyInScotland;
+	private Integer isPropertyInScotland;
 	@Column(name = "ContactPerson")
 	private String contactPerson;
 	@Column(name = "ContactName")
 	private String contactName;
 	@Column(name = "ContactNumber")
-	private Integer contactNumber;
+	private Long contactNumber;
 	
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
 
 
-	public Boolean getIsPropertyInScotland() {
+	public Integer getIsPropertyInScotland() {
 		return isPropertyInScotland;
 	}
 
-	public void setIsPropertyInScotland(Boolean isPropertyInScotland) {
+	public void setIsPropertyInScotland(Integer isPropertyInScotland) {
 		this.isPropertyInScotland = isPropertyInScotland;
 	}
 
@@ -59,11 +62,11 @@ public class Valuation {
 		this.contactName = contactName;
 	}
 
-	public Integer getContactNumber() {
+	public Long getContactNumber() {
 		return contactNumber;
 	}
 
-	public void setContactNumber(Integer contactNumber) {
+	public void setContactNumber(Long contactNumber) {
 		this.contactNumber = contactNumber;
 	}
 

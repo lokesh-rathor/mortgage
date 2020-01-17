@@ -1,18 +1,28 @@
 package com.santander.mortgage.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ValuationRequestDto {
 	
-	private Boolean isPropertyInScotland;
+	@NotNull
+	private String userId;
+	@NotNull
+	private Integer isPropertyInScotland;
+	@NotNull
 	private String contactPerson;
+	@NotNull
+	@Size(min=2)
 	private String contactName;
-	private Integer contactNumber;
+	@NotNull
+	private Long contactNumber;
 	
 
-	public Boolean getIsPropertyInScotland() {
+	public Integer getIsPropertyInScotland() {
 		return isPropertyInScotland;
 	}
-	public void setIsPropertyInScotland(Boolean isPropertyInScotland) {
-		this.isPropertyInScotland = isPropertyInScotland;
+	public void setIsPropertyInScotland(int i) {
+		this.isPropertyInScotland = i;
 	}
 	public String getContactPerson() {
 		return contactPerson;
@@ -26,13 +36,19 @@ public class ValuationRequestDto {
 	public void setContactName(String contactName) {
 		this.contactName = contactName;
 	}
-	public Integer getContactNumber() {
+	public Long getContactNumber() {
 		return contactNumber;
 	}
-	public void setContactNumber(Integer contactNumber) {
+	public void setContactNumber(Long contactNumber) {
 		this.contactNumber = contactNumber;
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 
 }

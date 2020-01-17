@@ -17,17 +17,21 @@ import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.UserRegistration;
+import com.santander.mortgage.dto.ValuationRequestDto;
+import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.exception.UserNotFoundException;
 import com.santander.mortgage.model.ConfirmMortgageDetails;
 import com.santander.mortgage.model.MortgageOptionsDetail;
 import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.PropertyDetails;
+import com.santander.mortgage.model.Valuation;
 import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.repository.ConfirmMortgageRepository;
 import com.santander.mortgage.repository.MortgageOptionsRepository;
 import com.santander.mortgage.repository.PaymentDetailsRepository;
 import com.santander.mortgage.repository.PropertyDetailsRepository;
+import com.santander.mortgage.repository.ValuationRepository;
 import com.santander.mortgage.service.MortgageService;
 
 @Service
@@ -47,6 +51,9 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Autowired
 	private RegistrationProxy registrationProxy;
+	
+	@Autowired
+	private ValuationRepository valuationRespository;
 
 	@Override
 	 @Cacheable(value="mortgageConfirmCache")
@@ -187,6 +194,50 @@ public class MortgageServiceImpl implements MortgageService {
 
 		return getPaymentDetailResponseDto;
 
+	}
+	
+	
+
+	@Override
+	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto) {
+		
+		Valuation valuation = new Valuation();
+		valuation.setContactName(valuationRequestDto.getContactName());
+		valuation.setContactNumber(valuationRequestDto.getContactNumber());
+		valuation.setContactPerson(valuationRequestDto.getContactPerson());
+		valuation.setIsPropertyInScotland(valuationRequestDto.getIsPropertyInScotland());
+		valuation.setUserId(valuationRequestDto.getUserId());
+		
+		valuation = valuationRespository.save(valuation);
+		
+		ValuationResponseDto valuationResponseDto = new ValuationResponseDto();
+		valuationResponseDto.setContactName(valuation.getContactName());
+		valuationResponseDto.setContactPerson(valuation.getContactPerson());
+		valuationResponseDto.setContactNumber(valuation.getContactNumber());
+		valuationResponseDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
+		valuationResponseDto.setValuationId(valuation.getContactNumber());
+		valuationResponseDto.setUserId(valuation.getUserId());
+		valuationResponseDto.setMessage("Valuation details added");
+		
+		return valuationResponseDto;
+	}
+	
+	@Override
+	public ValuationResponseDto getValuation(Long userId) {
+		Valuation valuation = valuationRespository.findByUserId(userId);
+		if (valuation == null) {
+			throw new UserNotFoundException("User not found");
+		}
+		
+		ValuationResponseDto valuationResponseDto = new ValuationResponseDto();
+		valuationResponseDto.setContactName(valuation.getContactName());
+		valuationResponseDto.setContactPerson(valuation.getContactPerson());
+		valuationResponseDto.setContactNumber(valuation.getContactNumber());
+		valuationResponseDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
+		valuationResponseDto.setValuationId(valuation.getContactNumber());
+
+		return valuationResponseDto;
+     
 	}
 
 }

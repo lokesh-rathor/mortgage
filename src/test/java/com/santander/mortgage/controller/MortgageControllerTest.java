@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +30,6 @@ import com.santander.mortgage.dto.UserRegistration;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.service.MortgageService;
-import com.santander.mortgage.service.ValuationService;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MortgageController.class)
@@ -43,35 +41,89 @@ public class MortgageControllerTest {
 	@Mock
 	MortgageControllerTest mortgageControllerTest;
 
-	@MockBean
-	private ValuationService valuationService;
-
+	
 	@MockBean
 	private MortgageService mortgageService;
 
 	@Autowired
 	private MockMvc mockMvc;
 
+
+	/*
+	 * public void testPostValuation() throws Exception { ValuationRequestDto
+	 * request = new ValuationRequestDto(); request.setContactName("nrj");
+	 * request.setContactNumber(5658846);
+	 * request.setContactPerson("Current Account"); //
+	 * request.setIsPropertyInScotland(0);
+	 * 
+	 * String requestJson = jsonToString(request);
+	 * 
+	 * ValuationResponseDto response = new ValuationResponseDto();
+	 * response.setMessage("Added Successfully"); response.setUserId(2L);
+	 * 
+	 * //when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))
+	 * ).thenReturn(response);
+	 * 
+	 * mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON
+	 * ).content(requestJson)) .andExpect(status().is(200));
+	 * 
+	 * }
+	 */
+	
+	  @Test public void testPostValuation() throws Exception {
+	  
+	  ValuationResponseDto response = new ValuationResponseDto();
+	  response.setContactName("amit");
+	  response.setContactNumber(8285619131L);
+	  response.setContactPerson("Rahul");
+	  response.setIsPropertyInScotland(1);
+	  response.setUserId("devneeraj@mail.com");
+	  
+	  ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
+	  valuationRequestDto.setContactName("amit");
+	  valuationRequestDto.setContactNumber(8285619131L);
+	  valuationRequestDto.setContactPerson("Rahul");
+	  valuationRequestDto.setIsPropertyInScotland(1);
+	  valuationRequestDto.setUserId("devneeraj@mail.com");
+	  
+	  when(mortgageService.postValuation(Mockito.any(ValuationRequestDto.class))).
+	  thenReturn(response);
+	  
+	  String request = this.mapper(valuationRequestDto); 
+	  
+	  MvcResult mvcResult =
+	  mockMvc.perform(MockMvcRequestBuilders.post("/api/valuation")
+	  .contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andReturn();
+	  
+	  int status = mvcResult.getResponse().getStatus(); assertEquals(200, status);
+	  
+	  }
+	 
+
 	@Test
-	@Disabled
-	public void testPostValuation() throws Exception {
-		ValuationRequestDto request = new ValuationRequestDto();
-		request.setContactName("nrj");
-		request.setContactNumber(5658846);
-		request.setContactPerson("Current Account");
-		// request.setIsPropertyInScotland(0);
-
-		String requestJson = jsonToString(request);
-
-		ValuationResponseDto response = new ValuationResponseDto();
-		response.setMessage("Added Successfully");
-		response.setUserId(2L);
-
-		//when(valuationService.postValuation(Mockito.any(ValuationRequestDto.class))).thenReturn(response);
-
-		mockMvc.perform(post("/api/valuation").contentType(MediaType.APPLICATION_JSON).content(requestJson))
-				.andExpect(status().is(200));
-
+	public void testPostValuationError() throws Exception {
+		
+		
+	
+		ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
+		valuationRequestDto.setContactName(null);
+		valuationRequestDto.setContactNumber(82856191L);
+		valuationRequestDto.setContactPerson("Rahul");
+		valuationRequestDto.setIsPropertyInScotland(1);
+		
+		String request = this.mapper(valuationRequestDto);
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/valuation")
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isBadRequest());
+		
+	
+		
+		
+		
+	}
+	private String mapper(ValuationRequestDto valuationRequestDto) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(valuationRequestDto);
+		
 	}
 
 	@Test
