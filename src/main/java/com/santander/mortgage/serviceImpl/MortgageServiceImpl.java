@@ -3,11 +3,14 @@ package com.santander.mortgage.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.santander.mortgage.controller.MortgageController;
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
@@ -54,6 +57,8 @@ public class MortgageServiceImpl implements MortgageService {
 	
 	@Autowired
 	private ValuationRepository valuationRespository;
+	
+	private static final Logger logger = LoggerFactory.getLogger(MortgageServiceImpl.class);
 
 	@Override
 	 @Cacheable(value="mortgageConfirmCache")

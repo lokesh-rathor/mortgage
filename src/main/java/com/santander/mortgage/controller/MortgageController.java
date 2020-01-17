@@ -144,6 +144,7 @@ public class MortgageController {
 			throw new InvalidInputException("Invalid Input.");
 		}
 
+		logger.info("Inside paymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
