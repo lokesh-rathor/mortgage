@@ -158,7 +158,7 @@ public class MortgageController {
 	}
 	
 	// clear all cache using cache manager
-    @RequestMapping(value = "clearCache")
+    @RequestMapping(value = "/clearCache")
     public void clearCache(){
         for(String name:cacheManager.getCacheNames()){
         	System.out.println(cacheManager.getCache(name));
