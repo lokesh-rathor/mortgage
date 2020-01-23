@@ -10,6 +10,8 @@ import com.santander.mortgage.dto.MortgageResponseDto;
 import com.santander.mortgage.dto.PaymentDetailsRequestDto;
 import com.santander.mortgage.dto.PaymentDetailsResponseDto;
 import com.santander.mortgage.dto.PropertyDetailsDto;
+import com.santander.mortgage.dto.ValuationRequestDto;
+import com.santander.mortgage.dto.ValuationResponseDto;
 
 public interface MortgageService {
 
@@ -21,10 +23,19 @@ public interface MortgageService {
 
 	public List<MortgageOptionsResponseDto> mortgageOptions();
 	
-	public PropertyDetailsDto getPropertyDetailsById(Long userId);
+
+	
+	public List<PropertyDetailsDto> getPropertyDetailsById(Long userId); 
 	
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
 	
-	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) ;
+	
+	public List<GetPaymentDetailResponseDto> getPaymentDetailsById(Long userId) ;
+	
+
+	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto);
+
+	
+	public List<ValuationRequestDto> getValuation(Long userId);
 
 }

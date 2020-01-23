@@ -42,20 +42,20 @@ public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
 
+	@Autowired
+	private ValuationService valuationService;
+
 //<<<<<<< HEAD
 //	// @GetMapping("get-data")
 //	// public String getData() {
 //	// return proxy.sayHello();
 //	// } 
 //=======
+
 	@Autowired
-	private ValuationService valuationService;
-	
-	@Autowired
-    private CacheManager cacheManager; 
+	private CacheManager cacheManager;
 
 	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
-
 
 	@GetMapping("/confirmMortgage/{userId}")
 	public ResponseEntity<ConfirmMortgageResponseDto> confirmMortgage(@PathVariable("userId") Long userId) {
@@ -77,7 +77,7 @@ public class MortgageController {
 		return new ResponseEntity<MortgageResponseDto>(mortgageResponseDto, HttpStatus.OK);
 
 	}
-	
+
 	@PutMapping("/propertyDetails/{userId}")
 	public ResponseEntity<MortgageResponseDto> updateMortgage(@RequestBody @Valid MortgageRequestDto mortgageRequestDto,
 			Errors errors) throws InvalidInputException {
@@ -92,10 +92,25 @@ public class MortgageController {
 
 	}
 
+	/*
+	 * @GetMapping("/propertyDetailsById/{userId}") public
+	 * ResponseEntity<PropertyDetailsDto>
+	 * getPropertyDetailsById(@PathVariable("userId") Long userId) {
+	 * PropertyDetailsDto propertyDetailsDto = null;
+	 * 
+	 * try { propertyDetailsDto = mortgageService.getPropertyDetailsById(userId); }
+	 * catch (NullPointerException npe) { if (npe.getMessage() == null) {
+	 * System.out.println("Error Message : No Record found for this User Id " +
+	 * userId); } } return new
+	 * ResponseEntity<PropertyDetailsDto>(propertyDetailsDto, HttpStatus.OK); }
+	 */
 
 	@GetMapping("/propertyDetailsById/{userId}")
-	public ResponseEntity<PropertyDetailsDto> getPropertyDetailsById(@PathVariable("userId") Long userId) {
-		PropertyDetailsDto propertyDetailsDto = null; 
+
+	
+	public ResponseEntity<List<PropertyDetailsDto>> getPropertyDetailsById(@PathVariable("userId") Long userId) {
+		List<PropertyDetailsDto> propertyDetailsDto = null;
+
 		try {
 			propertyDetailsDto = mortgageService.getPropertyDetailsById(userId);
 		} catch (NullPointerException npe) {
@@ -103,9 +118,8 @@ public class MortgageController {
 				System.out.println("Error Message : No Record found for this User Id " + userId);
 			}
 		}
-		return new ResponseEntity<PropertyDetailsDto>(propertyDetailsDto, HttpStatus.OK);
+		return new ResponseEntity<List<PropertyDetailsDto>>(propertyDetailsDto, HttpStatus.OK);
 	}
-
 	/*
 	 * @GetMapping("/confirmMortgage/{userId}") public
 	 * ResponseEntity<PropertyDetailsDto> confirmMortgage(@PathVariable("userId")
@@ -136,16 +150,21 @@ public class MortgageController {
 	}
 
 	@PostMapping("/valuation")
-	ResponseEntity<ValuationRequestDto> postValuation(@RequestBody ValuationRequestDto valuationRequestDto) {
-		ValuationRequestDto valuationRequestDto2 = valuationService.postValuation(valuationRequestDto);
-		return new ResponseEntity<ValuationRequestDto>(valuationRequestDto2, HttpStatus.OK);
+	ResponseEntity<ValuationResponseDto> postValuation(@RequestBody @Valid ValuationRequestDto valuationRequestDto,
+			Errors errors) {
+
+		if (errors.hasErrors()) {
+			throw new InvalidInputException("Invalid Input.");
+		}
+
+		ValuationResponseDto valuationResponseDto = mortgageService.postValuation(valuationRequestDto);
+		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/valuation/{userId}")
-	public ResponseEntity<ValuationRequestDto> getValuation(@PathVariable("userId") Long userId) {
-		ValuationRequestDto valuationRequestDto = null;
-		valuationRequestDto = valuationService.getValuation(userId);
-		return new ResponseEntity<>(valuationRequestDto, HttpStatus.OK);
+	public ResponseEntity<List<ValuationRequestDto>> getValuation(@PathVariable("userId") Long userId) {
+		List<ValuationRequestDto> paymentDetailResponse = valuationService.getValuation(userId);
+		return new ResponseEntity<List<ValuationRequestDto>>(paymentDetailResponse, HttpStatus.OK);
 	}
 
 	@PostMapping("/payment-details")
@@ -156,25 +175,27 @@ public class MortgageController {
 			throw new InvalidInputException("Invalid Input.");
 		}
 
+		logger.info("Inside paymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
 		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getPaymentDetailsById/{userId}")
-	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
-		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
-		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
+	ResponseEntity<List<GetPaymentDetailResponseDto>> getPaymentDetails(@PathVariable("userId") Long userId) {
+		List<GetPaymentDetailResponseDto> paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
+		return new ResponseEntity<List<GetPaymentDetailResponseDto>>(paymentDetailResponse, HttpStatus.OK);
+
 	}
-	
+
 	// clear all cache using cache manager
-    @RequestMapping(value = "clearCache")
-    public void clearCache(){
-        for(String name:cacheManager.getCacheNames()){
-        	System.out.println(cacheManager.getCache(name));
-            cacheManager.getCache(name).clear();            // clear cache by name
-        }
-    }
+	@RequestMapping(value = "clearCache")
+	public void clearCache() {
+		for (String name : cacheManager.getCacheNames()) {
+			System.out.println(cacheManager.getCache(name));
+			cacheManager.getCache(name).clear(); // clear cache by name
+		}
+	}
 
 }
