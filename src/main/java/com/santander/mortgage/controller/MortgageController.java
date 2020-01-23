@@ -31,6 +31,7 @@ import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
 import com.santander.mortgage.service.MortgageService;
+import com.santander.mortgage.service.ValuationService;
 
 @CrossOrigin
 @RestController
@@ -39,6 +40,9 @@ import com.santander.mortgage.service.MortgageService;
 public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
+	
+	@Autowired
+	private ValuationService valuationService;
 
 //<<<<<<< HEAD
 //	// @GetMapping("get-data")
@@ -75,9 +79,23 @@ public class MortgageController {
 
 	}
 
+	/*
+	 * @GetMapping("/propertyDetailsById/{userId}") public
+	 * ResponseEntity<PropertyDetailsDto>
+	 * getPropertyDetailsById(@PathVariable("userId") Long userId) {
+	 * PropertyDetailsDto propertyDetailsDto = null;
+	 * 
+	 * try { propertyDetailsDto = mortgageService.getPropertyDetailsById(userId); }
+	 * catch (NullPointerException npe) { if (npe.getMessage() == null) {
+	 * System.out.println("Error Message : No Record found for this User Id " +
+	 * userId); } } return new
+	 * ResponseEntity<PropertyDetailsDto>(propertyDetailsDto, HttpStatus.OK); }
+	 */
+
+	
 	@GetMapping("/propertyDetailsById/{userId}")
-	public ResponseEntity<PropertyDetailsDto> getPropertyDetailsById(@PathVariable("userId") Long userId) {
-		PropertyDetailsDto propertyDetailsDto = null;
+	public ResponseEntity<List<PropertyDetailsDto>> getPropertyDetailsById(@PathVariable("userId") Long userId) {
+		List<PropertyDetailsDto> propertyDetailsDto = null;
 
 		try {
 			propertyDetailsDto = mortgageService.getPropertyDetailsById(userId);
@@ -86,9 +104,8 @@ public class MortgageController {
 				System.out.println("Error Message : No Record found for this User Id " + userId);
 			}
 		}
-		return new ResponseEntity<PropertyDetailsDto>(propertyDetailsDto, HttpStatus.OK);
+		return new ResponseEntity<List<PropertyDetailsDto>>(propertyDetailsDto, HttpStatus.OK);
 	}
-
 	/*
 	 * @GetMapping("/confirmMortgage/{userId}") public
 	 * ResponseEntity<PropertyDetailsDto> confirmMortgage(@PathVariable("userId")
@@ -129,12 +146,14 @@ public class MortgageController {
 		return new ResponseEntity<ValuationResponseDto>(valuationResponseDto, HttpStatus.OK);
 	}
 	
+	
+	 
 	@GetMapping("/valuation/{userId}")
-	public ResponseEntity<ValuationResponseDto> getValuation(@PathVariable("userId") Long userId) {
-		ValuationResponseDto valuationResponseDto = null;
-		valuationResponseDto = mortgageService.getValuation(userId);
-		return new ResponseEntity<>(valuationResponseDto, HttpStatus.OK);
+	public ResponseEntity<List<ValuationRequestDto>> getValuation(@PathVariable("userId") Long userId) {
+		List<ValuationRequestDto> paymentDetailResponse = valuationService.getValuation(userId);
+		return new ResponseEntity<List<ValuationRequestDto>>(paymentDetailResponse,HttpStatus.OK);
 	}
+	
 
 	@PostMapping("/payment-details")
 	ResponseEntity<PaymentDetailsResponseDto> payemtDetails(
@@ -150,13 +169,15 @@ public class MortgageController {
 
 		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
+
 	
 	@GetMapping("/getPaymentDetailsById/{userId}")
-	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
-		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
-		return new ResponseEntity<GetPaymentDetailResponseDto>(paymentDetailResponse, HttpStatus.OK);
-	}
+	ResponseEntity<List<GetPaymentDetailResponseDto>> getPaymentDetails(@PathVariable("userId") Long userId) {
+		List<GetPaymentDetailResponseDto> paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
+		return new ResponseEntity<List<GetPaymentDetailResponseDto>>(paymentDetailResponse,HttpStatus.OK);
 	
+		
+	}
 	// clear all cache using cache manager
     @RequestMapping(value = "clearCache")
     public void clearCache(){

@@ -12,6 +12,7 @@ public interface ValuationRepository extends JpaRepository<Valuation,Integer>{
 
 	public Valuation findByUserId(@Param(value = "UserId") Long userId);
 
+
 	
 
 }

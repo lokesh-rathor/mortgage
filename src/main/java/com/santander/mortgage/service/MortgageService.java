@@ -21,15 +21,19 @@ public interface MortgageService {
 
 	public List<MortgageOptionsResponseDto> mortgageOptions();
 	
-	public PropertyDetailsDto getPropertyDetailsById(Long userId);
+
+	
+	public List<PropertyDetailsDto> getPropertyDetailsById(Long userId); 
 	
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
 	
-	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) ;
+	
+	public List<GetPaymentDetailResponseDto> getPaymentDetailsById(Long userId) ;
 	
 
 	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto);
 
-	public ValuationResponseDto getValuation(Long userId);
+	
+	public List<ValuationRequestDto> getValuation(Long userId);
 
 }
