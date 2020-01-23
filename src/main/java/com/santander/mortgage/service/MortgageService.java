@@ -14,6 +14,8 @@ import com.santander.mortgage.dto.PropertyDetailsDto;
 public interface MortgageService {
 
 	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto);
+	
+	public MortgageResponseDto updatePropertyDetails(MortgageRequestDto mortgageRequestDto);
 
 	public ConfirmMortgageResponseDto confirmMortgage(Long userId);
 

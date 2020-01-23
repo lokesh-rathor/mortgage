@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,11 +77,25 @@ public class MortgageController {
 		return new ResponseEntity<MortgageResponseDto>(mortgageResponseDto, HttpStatus.OK);
 
 	}
+	
+	@PutMapping("/propertyDetails/{userId}")
+	public ResponseEntity<MortgageResponseDto> updateMortgage(@RequestBody @Valid MortgageRequestDto mortgageRequestDto,
+			Errors errors) throws InvalidInputException {
+
+		if (errors.hasErrors()) {
+			throw new InvalidInputException("Invalid Input is missing");
+		}
+
+		logger.info("Inside Property Details method: --");
+		MortgageResponseDto mortgageResponseDto = mortgageService.updatePropertyDetails(mortgageRequestDto);
+		return new ResponseEntity<MortgageResponseDto>(mortgageResponseDto, HttpStatus.OK);
+
+	}
+
 
 	@GetMapping("/propertyDetailsById/{userId}")
 	public ResponseEntity<PropertyDetailsDto> getPropertyDetailsById(@PathVariable("userId") Long userId) {
-		PropertyDetailsDto propertyDetailsDto = null;
-
+		PropertyDetailsDto propertyDetailsDto = null; 
 		try {
 			propertyDetailsDto = mortgageService.getPropertyDetailsById(userId);
 		} catch (NullPointerException npe) {
