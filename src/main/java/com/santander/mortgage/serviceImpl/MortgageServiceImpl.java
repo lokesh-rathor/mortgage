@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.UserRegistration;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
+import com.santander.mortgage.exception.PaymentAlreadyDoneException;
 import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.exception.UserNotFoundException;
 import com.santander.mortgage.model.ConfirmMortgageDetails;
@@ -158,12 +160,12 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
 		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		PaymentDetails payment = new PaymentDetails();
 		if (paymentDetailsResponse != null) {
-			payment.setPaymentId(paymentDetailsResponse.getPaymentId());
+			throw new PaymentAlreadyDoneException("Payment already done!");
 		}
 		payment.setUserId(user.getBody().getUserId());
 		payment.setSortCode(paymentDetailsRequestDto.getSortCode());
@@ -243,6 +245,28 @@ public class MortgageServiceImpl implements MortgageService {
 		
 		return valuationResponseDto;
      
+	}
+
+	@Override
+	@CachePut(value="mortgagePaymentCache")
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
+		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
+		if (paymentDetailsResponse == null) {
+			throw new PaymentDetailsNotFoundException("Payment details not found");
+		}
+		paymentDetailsResponse.setSortCode(paymentDetailsRequestDto.getSortCode());
+		paymentDetailsResponse.setAccountHolderName(paymentDetailsRequestDto.getAccountHolderName());
+		paymentDetailsResponse.setAccountNumber(paymentDetailsRequestDto.getAccountNumber());
+		paymentDetailsResponse.setCurrentcircumstances(paymentDetailsRequestDto.getCurrentCircumstances());
+		paymentDetailsResponse.setDayOfPayment(paymentDetailsRequestDto.getDayOfPayment());
+		PaymentDetails paymentDetails = paymentDetailsRepository.save(paymentDetailsResponse);
+
+		PaymentDetailsResponseDto paymentDetailsResponseDto = new PaymentDetailsResponseDto();
+		paymentDetailsResponseDto.setMessage("payment updated Successfully");
+		paymentDetailsResponseDto.setUserId(paymentDetails.getUserId());
+
+		return paymentDetailsResponseDto;
 	}
 
 }

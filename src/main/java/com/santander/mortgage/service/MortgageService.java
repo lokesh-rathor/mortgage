@@ -23,6 +23,8 @@ public interface MortgageService {
 	
 	public PropertyDetailsDto getPropertyDetailsById(Long userId);
 	
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
+	
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
 	
 	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) ;
