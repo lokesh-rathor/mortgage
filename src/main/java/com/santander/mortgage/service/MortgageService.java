@@ -16,22 +16,28 @@ import com.santander.mortgage.dto.ValuationResponseDto;
 public interface MortgageService {
 
 	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto);
+	
+	public MortgageResponseDto updatePropertyDetails(MortgageRequestDto mortgageRequestDto);
 
 	public ConfirmMortgageResponseDto confirmMortgage(Long userId);
 
 	public List<MortgageOptionsResponseDto> mortgageOptions();
 	
-	public PropertyDetailsDto getPropertyDetailsById(Long userId);
+
+	
+	public List<PropertyDetailsDto> getPropertyDetailsById(Long userId); 
 	
 	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
 	
 	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
 	
-	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) ;
+	
+	public List<GetPaymentDetailResponseDto> getPaymentDetailsById(Long userId) ;
 	
 
 	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto);
 
-	public ValuationResponseDto getValuation(Long userId);
+	
+	public List<ValuationRequestDto> getValuation(Long userId);
 
 }
