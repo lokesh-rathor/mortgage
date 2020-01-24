@@ -6,11 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.santander.mortgage.controller.MortgageController;
 import com.santander.mortgage.dto.ConfirmMortgageResponseDto;
 import com.santander.mortgage.dto.GetPaymentDetailResponseDto;
 import com.santander.mortgage.dto.MortgageOptionsResponseDto;
@@ -22,6 +22,7 @@ import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.UserRegistration;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
+import com.santander.mortgage.exception.PaymentAlreadyDoneException;
 import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.exception.UserNotFoundException;
 import com.santander.mortgage.model.ConfirmMortgageDetails;
@@ -61,7 +62,7 @@ public class MortgageServiceImpl implements MortgageService {
 	private static final Logger logger = LoggerFactory.getLogger(MortgageServiceImpl.class);
 
 	@Override
-	 @Cacheable(value="mortgageConfirmCache")
+	@Cacheable(value = "mortgageConfirmCache")
 	public ConfirmMortgageResponseDto confirmMortgage(Long userId) {
 		ConfirmMortgageDetails confirmMortgageDetails = confirmMortgageRepository.findByUserId(userId);
 		if (confirmMortgageDetails == null) {
@@ -85,45 +86,71 @@ public class MortgageServiceImpl implements MortgageService {
 		return confirmMortgageResponseDto;
 	}
 
+	// @CachePut(value="mortgagePropertCache")
 	public MortgageResponseDto savePropertyDetails(MortgageRequestDto mortgageRequestDto) {
 
-		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(mortgageRequestDto.getUserId());
+		PropertyDetails propertyDetail = new PropertyDetails();
+		
+		propertyDetail.setUserId(mortgageRequestDto.getUserId());
+		propertyDetail.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
+		propertyDetail.setPropertyType(mortgageRequestDto.getPropertyType());
+		propertyDetail.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
+		propertyDetail.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
+		propertyDetail.setPropertyAge(mortgageRequestDto.getPropertyAge());
+		propertyDetail.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
+		propertyDetail.setTenureType(mortgageRequestDto.getTenureType());
+		propertyDetail.setPostCode(mortgageRequestDto.getPostCode());
+		propertyDetail = propertyDetailsRepository.save(propertyDetail);
 
-		if (propertyDetails == null) {
-			PropertyDetails propertyDetail = new PropertyDetails();
-			propertyDetail.setUserId(mortgageRequestDto.getUserId());
-			propertyDetail.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
-			propertyDetail.setPropertyType(mortgageRequestDto.getPropertyType());
-			propertyDetail.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
-			propertyDetail.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
-			propertyDetail.setPropertyAge(mortgageRequestDto.getPropertyAge());
-			propertyDetail.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
-			propertyDetail.setTenureType(mortgageRequestDto.getTenureType());
-			propertyDetail.setPostCode(mortgageRequestDto.getPostCode());
-			propertyDetails = propertyDetailsRepository.save(propertyDetail);
 
-		} else {
-			propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
-			propertyDetails.setPropertyType(mortgageRequestDto.getPropertyType());
-			propertyDetails.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
-			propertyDetails.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
-			propertyDetails.setPropertyAge(mortgageRequestDto.getPropertyAge());
-			propertyDetails.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
-			propertyDetails.setTenureType(mortgageRequestDto.getTenureType());
-			propertyDetails.setPostCode(mortgageRequestDto.getPostCode());
-			propertyDetails = propertyDetailsRepository.save(propertyDetails);
-
-		}
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
-		mortgageResponseDto.setUserId(propertyDetails.getUserId().intValue());
+		mortgageResponseDto.setUserId(propertyDetail.getUserId().intValue());
 		mortgageResponseDto.setMessage("Property Details saved successfully");
+
+		return mortgageResponseDto;
+
+	}
+	//@CachePut(value="mortgagePropertyCache")
+	public MortgageResponseDto updatePropertyDetails(MortgageRequestDto mortgageRequestDto) {
+
+		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(mortgageRequestDto.getUserId());
+		
+		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
+
+		if (propertyDetails == null)
+		{
+			//mortgageResponseDto.setUserId(propertyDetails.getUserId().intValue());
+			mortgageResponseDto.setMessage("Property Details doesn't exists");
+			return mortgageResponseDto;
+		}
+		else
+		{
+		
+		propertyDetails.setPropertyAddress(mortgageRequestDto.getPropertyAddress());
+		propertyDetails.setPropertyType(mortgageRequestDto.getPropertyType());
+		propertyDetails.setNumberOfBedrooms(mortgageRequestDto.getNumberOfBedrooms());
+		propertyDetails.setPropertyBuilt(mortgageRequestDto.getPropertyBuilt());
+		propertyDetails.setPropertyAge(mortgageRequestDto.getPropertyAge());
+		propertyDetails.setIsPropertyCovered(mortgageRequestDto.getIsPropertyCovered());
+		propertyDetails.setTenureType(mortgageRequestDto.getTenureType());
+		propertyDetails.setPostCode(mortgageRequestDto.getPostCode());
+		propertyDetails = propertyDetailsRepository.save(propertyDetails);
+
+		mortgageResponseDto.setUserId(propertyDetails.getUserId().intValue());
+		mortgageResponseDto.setMessage("Property Details updated successfully");
+		}
+
+		
 
 		return mortgageResponseDto;
 
 	}
 
 	@Override
-	@Cacheable(value="mortgageOptionsCache")
+
+	@Cacheable(value = "mortgageOptionsCache")
+
+
 	public List<MortgageOptionsResponseDto> mortgageOptions() {
 		List<MortgageOptionsDetail> mortgageOptionsDetailList = mortgageOptionsRepository.findAll();
 		List<MortgageOptionsResponseDto> mortgageOptionsResponseDtoList = mortgageOptionsDetailList.stream().map(e -> {
@@ -137,10 +164,13 @@ public class MortgageServiceImpl implements MortgageService {
 		return mortgageOptionsResponseDtoList;
 	}
 
+
+
 	@Override
-	@Cacheable(value = "mortgagePropertyCache")
-	public PropertyDetailsDto getPropertyDetailsById(Long userId) {
+    @Cacheable(value="mortgagePropertyCache")
+	public List<PropertyDetailsDto> getPropertyDetailsById(Long userId) {
 		PropertyDetails propertyDetails = propertyDetailsRepository.findByUserId(userId);
+		List<PropertyDetailsDto> paymentDetailResponseDtoList=new ArrayList<PropertyDetailsDto>();
 		PropertyDetailsDto propertyDetailsDto = new PropertyDetailsDto();
 
 		System.out.println("In get property");
@@ -154,17 +184,18 @@ public class MortgageServiceImpl implements MortgageService {
 		propertyDetailsDto.setPropertyAge(propertyDetails.getPropertyAge());
 		propertyDetailsDto.setIsPropertyCovered(propertyDetails.getIsPropertyCovered());
 		propertyDetailsDto.setTenureType(propertyDetails.getTenureType());
+		paymentDetailResponseDtoList.add(propertyDetailsDto);
 
-		return propertyDetailsDto;
+		return paymentDetailResponseDtoList;
 	}
-
+	
 	@Override
-	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
 		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		PaymentDetails payment = new PaymentDetails();
 		if (paymentDetailsResponse != null) {
-			payment.setPaymentId(paymentDetailsResponse.getPaymentId());
+			throw new PaymentAlreadyDoneException("Payment already done!");
 		}
 		payment.setUserId(user.getBody().getUserId());
 		payment.setSortCode(paymentDetailsRequestDto.getSortCode());
@@ -182,27 +213,31 @@ public class MortgageServiceImpl implements MortgageService {
 
 	}
 
-	@Override
-	@Cacheable(value = "mortgagePaymentCache")//, key = "T(java.util.Objects).hash(#p0,#p1, #p2)")
-	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) {
-		PaymentDetails paymentDetailResponseDto = paymentDetailsRepository.findByUserId(userId);
-		if (paymentDetailResponseDto == null) {
-			throw new PaymentDetailsNotFoundException("Payment details not found.");
-		}
-		GetPaymentDetailResponseDto getPaymentDetailResponseDto = new GetPaymentDetailResponseDto();
-		getPaymentDetailResponseDto.setPaymentId(paymentDetailResponseDto.getPaymentId());
-		getPaymentDetailResponseDto.setAccountHolderName(paymentDetailResponseDto.getAccountHolderName());
-		getPaymentDetailResponseDto.setAccountNumber(paymentDetailResponseDto.getAccountNumber());
-		getPaymentDetailResponseDto.setCurrentcircumstances(paymentDetailResponseDto.getCurrentcircumstances());
-		getPaymentDetailResponseDto.setDayOfPayment(paymentDetailResponseDto.getDayOfPayment());
-		getPaymentDetailResponseDto.setSortCode(paymentDetailResponseDto.getSortCode());
 
-		return getPaymentDetailResponseDto;
+	
+	
+
+	@Override
+
+	@Cacheable(value="mortgagePaymentCache")
+	public List<GetPaymentDetailResponseDto> getPaymentDetailsById(Long userId)   {
+		PaymentDetails paymentDetails = paymentDetailsRepository.findByUserId(userId);
+		if (paymentDetails == null) {
+			throw new PaymentDetailsNotFoundException("Payment details not found.");
+		} 
+		List<GetPaymentDetailResponseDto> paymentDetailResponseDtoList=new ArrayList<GetPaymentDetailResponseDto>();
+		GetPaymentDetailResponseDto getPaymentDetailResponseDto = new GetPaymentDetailResponseDto();
+		getPaymentDetailResponseDto.setPaymentId(paymentDetails.getPaymentId());
+		getPaymentDetailResponseDto.setAccountHolderName(paymentDetails.getAccountHolderName());
+		getPaymentDetailResponseDto.setAccountNumber(paymentDetails.getAccountNumber());
+		getPaymentDetailResponseDto.setCurrentcircumstances(paymentDetails.getCurrentcircumstances());
+		getPaymentDetailResponseDto.setDayOfPayment(paymentDetails.getDayOfPayment());
+		getPaymentDetailResponseDto.setSortCode(paymentDetails.getSortCode());
+		paymentDetailResponseDtoList.add(getPaymentDetailResponseDto);
+		return paymentDetailResponseDtoList;
 
 	}
 	
-	
-
 	@Override
 	public ValuationResponseDto postValuation(ValuationRequestDto valuationRequestDto) {
 		
@@ -227,23 +262,49 @@ public class MortgageServiceImpl implements MortgageService {
 		return valuationResponseDto;
 	}
 	
+
 	@Override
-	public ValuationResponseDto getValuation(Long userId) {
+	public List<ValuationRequestDto> getValuation(Long userId) {
 		Valuation valuation = valuationRespository.findByUserId(userId);
 		if (valuation == null) {
 			throw new UserNotFoundException("User not found");
 		}
 		
-		ValuationResponseDto valuationResponseDto = new ValuationResponseDto();
-		valuationResponseDto.setContactName(valuation.getContactName());
-		valuationResponseDto.setContactPerson(valuation.getContactPerson());
-		valuationResponseDto.setContactNumber(valuation.getContactNumber());
-		valuationResponseDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
-		valuationResponseDto.setValuationId(valuation.getContactNumber());
-		valuationResponseDto.setUserId(valuation.getUserId());
-		
-		return valuationResponseDto;
+
+		List<ValuationRequestDto> valuationResponseDtoList=new ArrayList<ValuationRequestDto>();
+		ValuationRequestDto valuationRequestDto = new ValuationRequestDto();
+		valuationRequestDto.setContactName(valuation.getContactName());
+		valuationRequestDto.setContactPerson(valuation.getContactPerson());
+		valuationRequestDto.setContactNumber(valuation.getContactNumber());
+		valuationRequestDto.setIsPropertyInScotland(valuation.getIsPropertyInScotland());
+		valuationResponseDtoList.add(valuationRequestDto);
+		return valuationResponseDtoList;
      
+	}
+	
+	
+	 
+
+	@Override
+	@CachePut(value="mortgagePaymentCache")
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
+		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
+		if (paymentDetailsResponse == null) {
+			throw new PaymentDetailsNotFoundException("Payment details not found");
+		}
+		paymentDetailsResponse.setSortCode(paymentDetailsRequestDto.getSortCode());
+		paymentDetailsResponse.setAccountHolderName(paymentDetailsRequestDto.getAccountHolderName());
+		paymentDetailsResponse.setAccountNumber(paymentDetailsRequestDto.getAccountNumber());
+		paymentDetailsResponse.setCurrentcircumstances(paymentDetailsRequestDto.getCurrentCircumstances());
+		paymentDetailsResponse.setDayOfPayment(paymentDetailsRequestDto.getDayOfPayment());
+		PaymentDetails paymentDetails = paymentDetailsRepository.save(paymentDetailsResponse);
+
+		PaymentDetailsResponseDto paymentDetailsResponseDto = new PaymentDetailsResponseDto();
+		paymentDetailsResponseDto.setMessage("payment updated Successfully");
+		paymentDetailsResponseDto.setUserId(paymentDetails.getUserId());
+
+		return paymentDetailsResponseDto;
 	}
 
 }

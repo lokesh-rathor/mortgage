@@ -13,7 +13,6 @@ public class PaymentDetailsRequestDto {
 	private Integer currentCircumstances;
 	
 	@NotNull
-	//@Size(min=12)
 	@Min(12)
 	private Long sortCode;
 	

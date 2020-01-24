@@ -40,5 +40,14 @@ public class MortgageExceptionHandler {
 		exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<ErrorResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(PaymentAlreadyDoneException.class)
+	public final ResponseEntity<ErrorResponse> handlePaymentAlreadyDoneException(
+			PaymentAlreadyDoneException ex) {
+		ErrorResponse exceptionResponse = new ErrorResponse();
+		exceptionResponse.setMessage(ex.getMessage());
+		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+		return new ResponseEntity<ErrorResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
 
 }
