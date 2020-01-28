@@ -10,10 +10,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableSwagger2
-
 @EnableFeignClients("com.santander.mortgage")
 @EnableCaching
+@EnableSwagger2
 public class MortgageApplication {
 
 	public static void main(String[] args) {

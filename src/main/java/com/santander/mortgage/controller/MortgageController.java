@@ -37,7 +37,6 @@ import com.santander.mortgage.service.ValuationService;
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
-
 public class MortgageController {
 	@Autowired
 	private MortgageService mortgageService;
@@ -179,7 +178,7 @@ public class MortgageController {
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.savePaymentDetails(paymentDetailsRequestDto);
 
-		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
+		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
 	
 	
@@ -195,21 +194,24 @@ public class MortgageController {
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
 				.updatePaymentDetails(paymentDetailsRequestDto);
 
-		return new ResponseEntity<PaymentDetailsResponseDto>(paymentDetailsResponseDto, HttpStatus.OK);
+		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
 
 	@GetMapping("/getPaymentDetailsById/{userId}")
-	ResponseEntity<List<GetPaymentDetailResponseDto>> getPaymentDetails(@PathVariable("userId") Long userId) {
-		List<GetPaymentDetailResponseDto> paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
-		return new ResponseEntity<List<GetPaymentDetailResponseDto>>(paymentDetailResponse, HttpStatus.OK);
-
+	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
+		
+		if(userId<=0) {
+			throw new InvalidInputException("Invalid Input.");
+		}
+		
+		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
+		return new ResponseEntity<>(paymentDetailResponse, HttpStatus.OK);
 	}
 
 	// clear all cache using cache manager
-	@RequestMapping(value = "clearCache")
+	@RequestMapping(value = "/clearCache")
 	public void clearCache() {
 		for (String name : cacheManager.getCacheNames()) {
-			System.out.println(cacheManager.getCache(name));
 			cacheManager.getCache(name).clear(); // clear cache by name
 		}
 	}

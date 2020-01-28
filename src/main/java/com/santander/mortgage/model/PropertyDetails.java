@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class PropertyDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "property_id")
 	private Long propertyId;
 

@@ -7,11 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name="PaymentDetails")
+@Table(name="payment_details")
 @Entity
 public class PaymentDetails {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer PaymentId;
 	
 	@Column(name = "userId")
