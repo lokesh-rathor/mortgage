@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.santander.mortgage.dto.UserRegistration;
 
@@ -16,6 +17,6 @@ public interface RegistrationProxy {
 	public String sayHello();
 	
 	@GetMapping("/user-registration-service/users/details/{userId}")
-	public ResponseEntity<UserRegistration> getUserDetails(@PathVariable("userId") Long userId);
+	public ResponseEntity<UserRegistration> getUserDetails(@PathVariable("userId") Long userId, @RequestHeader("X-Auth-Token") String token);
 
 }

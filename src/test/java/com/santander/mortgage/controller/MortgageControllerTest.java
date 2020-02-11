@@ -140,7 +140,7 @@ public class MortgageControllerTest {
 		response.setMessage("Payment done Successfully");
 		response.setUserId(1L);
 
-		when(mortgageService.savePaymentDetails(Mockito.any(PaymentDetailsRequestDto.class))).thenReturn(response);
+		when(mortgageService.savePaymentDetails(Mockito.any(PaymentDetailsRequestDto.class),Mockito.anyString())).thenReturn(response);
 		mockMvc.perform(post("/api/payment-details").contentType(MediaType.APPLICATION_JSON).content(requestJson))
 				.andExpect(status().is(200));
 	}
@@ -188,7 +188,7 @@ public class MortgageControllerTest {
 		response.setMessage("Payment updated Successfully");
 		response.setUserId(1L);
 
-		when(mortgageService.updatePaymentDetails(Mockito.any(PaymentDetailsRequestDto.class))).thenReturn(response);
+		when(mortgageService.updatePaymentDetails(Mockito.any(PaymentDetailsRequestDto.class), Mockito.anyString())).thenReturn(response);
 		mockMvc.perform(put("/api/update/payment-details").contentType(MediaType.APPLICATION_JSON).content(requestJson))
 				.andExpect(status().isOk());
 	}

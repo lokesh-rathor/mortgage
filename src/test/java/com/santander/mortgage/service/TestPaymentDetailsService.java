@@ -20,12 +20,15 @@ import com.santander.mortgage.exception.PaymentAlreadyDoneException;
 import com.santander.mortgage.exception.PaymentDetailsNotFoundException;
 import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.proxy.RegistrationProxy;
+import com.santander.mortgage.proxy.ServiceClient;
 import com.santander.mortgage.repository.PaymentDetailsRepository;
 import com.santander.mortgage.serviceImpl.MortgageServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 class TestPaymentDetailsService {
 	
+	private static final String TOKEN = "token";
+
 	@InjectMocks
 	private MortgageServiceImpl mortgageServiceImpl;
 	
@@ -34,6 +37,10 @@ class TestPaymentDetailsService {
 	
 	@Mock
 	private RegistrationProxy registrationProxy;
+	
+	@Mock
+	private ServiceClient serviceClient;
+	
 	
 	@Test
 	void testSavePaymentDetails() {
@@ -47,7 +54,9 @@ class TestPaymentDetailsService {
 		paymentDetails.setAccountHolderName("asdfaf");
 		paymentDetails.setUserId(1L);
 		
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+	//	Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		
 		Mockito.when(paymentDetailsRepository.findByUserId(Mockito.any(Long.class))).thenReturn(null);
 		
 		Mockito.when(paymentDetailsRepository.save(Mockito.any(PaymentDetails.class))).thenReturn(paymentDetails);
@@ -55,7 +64,7 @@ class TestPaymentDetailsService {
 		paymentDetailsResponseDto.setMessage("payment done Successfully");
 		paymentDetailsResponseDto.setUserId(1L);
 		
-		PaymentDetailsResponseDto paymentDetailsResponse = mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto);
+		PaymentDetailsResponseDto paymentDetailsResponse = mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto, TOKEN);
 		
 		assertEquals(paymentDetailsResponse.getUserId(),paymentDetailsResponseDto.getUserId());
 	}
@@ -65,9 +74,9 @@ class TestPaymentDetailsService {
 		PaymentDetailsRequestDto paymentDetailsRequestDto = new PaymentDetailsRequestDto();
 		paymentDetailsRequestDto.setUserId(145L);
 	
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenThrow(RuntimeException.class);
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenThrow(RuntimeException.class);
 		
-		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto));
+		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto,TOKEN));
 	}
 	
 	@Test
@@ -82,10 +91,12 @@ class TestPaymentDetailsService {
 		paymentDetails.setAccountHolderName("asdfaf");
 		paymentDetails.setUserId(1L);
 		
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		//Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
 		Mockito.when(paymentDetailsRepository.findByUserId(Mockito.any(Long.class))).thenReturn(paymentDetails);
 		
-		Assertions.assertThrows(PaymentAlreadyDoneException.class, () -> mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto));
+		Assertions.assertThrows(PaymentAlreadyDoneException.class, () -> mortgageServiceImpl.savePaymentDetails(paymentDetailsRequestDto,TOKEN));
 	}
 	
 	@Test
@@ -104,7 +115,9 @@ class TestPaymentDetailsService {
 		newPaymentDetails.setAccountHolderName("Peter");
 		newPaymentDetails.setUserId(1L);
 		
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		//Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		
 		Mockito.when(paymentDetailsRepository.findByUserId(Mockito.any(Long.class))).thenReturn(paymentDetails);
 		Mockito.when(paymentDetailsRepository.save(Mockito.any(PaymentDetails.class))).thenReturn(newPaymentDetails);
 		
@@ -112,7 +125,7 @@ class TestPaymentDetailsService {
 		paymentDetailsResponseDto.setMessage("payment updated Successfully");
 		paymentDetailsResponseDto.setUserId(1L);
 		
-		PaymentDetailsResponseDto paymentDetailsResponse = mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto);
+		PaymentDetailsResponseDto paymentDetailsResponse = mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto,TOKEN);
 		
 		assertEquals(paymentDetailsResponse.getUserId(),paymentDetailsResponseDto.getUserId());
 	}
@@ -125,10 +138,12 @@ class TestPaymentDetailsService {
 		UserRegistration userRegistration=new UserRegistration();
 		userRegistration.setUserId(1L);
 		
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+	//	Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
+		
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenReturn(new ResponseEntity<>(userRegistration,HttpStatus.OK));
 		Mockito.when(paymentDetailsRepository.findByUserId(Mockito.any(Long.class))).thenReturn(null);
 				
-		Assertions.assertThrows(PaymentDetailsNotFoundException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto));
+		Assertions.assertThrows(PaymentDetailsNotFoundException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto,TOKEN));
 	}
 	
 	@Test
@@ -136,9 +151,9 @@ class TestPaymentDetailsService {
 		PaymentDetailsRequestDto paymentDetailsRequestDto = new PaymentDetailsRequestDto();
 		paymentDetailsRequestDto.setUserId(145L);
 	
-		Mockito.when(registrationProxy.getUserDetails(Mockito.any(Long.class))).thenThrow(RuntimeException.class);
+		Mockito.when(serviceClient.getUserDetails(Mockito.any(Long.class), Mockito.anyString())).thenThrow(RuntimeException.class);
 		
-		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto));
+		Assertions.assertThrows(RuntimeException.class, () -> mortgageServiceImpl.updatePaymentDetails(paymentDetailsRequestDto,TOKEN));
 	}
 	
 	@Test

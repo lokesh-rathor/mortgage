@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +31,7 @@ import com.santander.mortgage.model.PaymentDetails;
 import com.santander.mortgage.model.PropertyDetails;
 import com.santander.mortgage.model.Valuation;
 import com.santander.mortgage.proxy.RegistrationProxy;
+import com.santander.mortgage.proxy.ServiceClient;
 import com.santander.mortgage.repository.ConfirmMortgageRepository;
 import com.santander.mortgage.repository.MortgageOptionsRepository;
 import com.santander.mortgage.repository.PaymentDetailsRepository;
@@ -60,6 +59,9 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Autowired
 	private ValuationRepository valuationRespository;
+	
+	@Autowired
+	private ServiceClient serviceClient;
 
 	private static final Logger logger = LoggerFactory.getLogger(MortgageServiceImpl.class);
 
@@ -182,8 +184,11 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
-		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token) {
+		//ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(),"");
+		
+		ResponseEntity<UserRegistration> user=serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
+		
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		PaymentDetails payment = new PaymentDetails();
 		if (paymentDetailsResponse != null) {
@@ -268,8 +273,11 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Override
 	@CacheEvict(value = "mortgagePaymentCache", allEntries = true)
-	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto) {
-		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId());
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token) {
+	//	ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
+		
+		ResponseEntity<UserRegistration> user=serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
+		
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		if (paymentDetailsResponse == null) {
 			throw new PaymentDetailsNotFoundException("Payment details not found");
@@ -287,5 +295,7 @@ public class MortgageServiceImpl implements MortgageService {
 
 		return paymentDetailsResponseDto;
 	}
+	
+	
 
 }

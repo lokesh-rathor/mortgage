@@ -25,9 +25,9 @@ public interface MortgageService {
 		
 	public List<PropertyDetailsDto> getPropertyDetailsById(Long userId); 
 	
-	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token);
 	
-	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto);
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token);
 	
 	public GetPaymentDetailResponseDto getPaymentDetailsById(Long userId) ;
 	

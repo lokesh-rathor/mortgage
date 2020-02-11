@@ -2,6 +2,7 @@ package com.santander.mortgage.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -53,6 +54,9 @@ public class MortgageController {
 
 	@Autowired
 	private CacheManager cacheManager;
+	
+	@Autowired
+	private HttpServletRequest request;
 
 	private static final Logger logger = LoggerFactory.getLogger(MortgageController.class);
 
@@ -173,10 +177,13 @@ public class MortgageController {
 		if (errors.hasErrors()) {
 			throw new InvalidInputException("Invalid Input.");
 		}
+		
+		String token = request.getHeader("Authorization");
+		logger.info("Inside paymentDetails...header ------>{}",token);
 
 		logger.info("Inside paymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
-				.savePaymentDetails(paymentDetailsRequestDto);
+				.savePaymentDetails(paymentDetailsRequestDto, token);
 
 		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
@@ -186,13 +193,17 @@ public class MortgageController {
 	ResponseEntity<PaymentDetailsResponseDto> updatePaymentDetails(
 			@RequestBody @Valid PaymentDetailsRequestDto paymentDetailsRequestDto, Errors errors) {
 
+		String token = request.getHeader("Authorization");
+		logger.info("Inside paymentDetails...header ------>{}",token);
+		
 		if (errors.hasErrors()) {
 			throw new InvalidInputException("Invalid Input.");
 		}
+		
 
 		logger.info("Inside updatePaymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
-				.updatePaymentDetails(paymentDetailsRequestDto);
+				.updatePaymentDetails(paymentDetailsRequestDto,token);
 
 		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
