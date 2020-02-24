@@ -32,6 +32,7 @@ import com.santander.mortgage.dto.PropertyDetailsDto;
 import com.santander.mortgage.dto.ValuationRequestDto;
 import com.santander.mortgage.dto.ValuationResponseDto;
 import com.santander.mortgage.exception.InvalidInputException;
+import com.santander.mortgage.proxy.RegistrationProxy;
 import com.santander.mortgage.service.MortgageService;
 import com.santander.mortgage.service.ValuationService;
 
@@ -45,16 +46,17 @@ public class MortgageController {
 	@Autowired
 	private ValuationService valuationService;
 
-//<<<<<<< HEAD
-//	// @GetMapping("get-data")
-//	// public String getData() {
-//	// return proxy.sayHello();
-//	// } 
-//=======
+	@Autowired
+	private RegistrationProxy proxy;
+	
+	@GetMapping("get-data")
+	public String getData() {
+		return proxy.sayHello();
+	}
 
 	@Autowired
 	private CacheManager cacheManager;
-	
+
 	@Autowired
 	private HttpServletRequest request;
 
@@ -110,7 +112,6 @@ public class MortgageController {
 
 	@GetMapping("/propertyDetailsById/{userId}")
 
-	
 	public ResponseEntity<List<PropertyDetailsDto>> getPropertyDetailsById(@PathVariable("userId") Long userId) {
 		List<PropertyDetailsDto> propertyDetailsDto = null;
 
@@ -177,9 +178,9 @@ public class MortgageController {
 		if (errors.hasErrors()) {
 			throw new InvalidInputException("Invalid Input.");
 		}
-		
+
 		String token = request.getHeader("Authorization");
-		logger.info("Inside paymentDetails...header ------>{}",token);
+		logger.info("Inside paymentDetails...header ------>{}", token);
 
 		logger.info("Inside paymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
@@ -187,45 +188,43 @@ public class MortgageController {
 
 		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
-	
-	
+
 	@PutMapping("/update/payment-details")
 	ResponseEntity<PaymentDetailsResponseDto> updatePaymentDetails(
 			@RequestBody @Valid PaymentDetailsRequestDto paymentDetailsRequestDto, Errors errors) {
 
 		String token = request.getHeader("Authorization");
-		logger.info("Inside paymentDetails...header ------>{}",token);
-		
+		logger.info("Inside paymentDetails...header ------>{}", token);
+
 		if (errors.hasErrors()) {
 			throw new InvalidInputException("Invalid Input.");
 		}
-		
 
 		logger.info("Inside updatePaymentDetails...");
 		PaymentDetailsResponseDto paymentDetailsResponseDto = mortgageService
-				.updatePaymentDetails(paymentDetailsRequestDto,token);
+				.updatePaymentDetails(paymentDetailsRequestDto, token);
 
 		return new ResponseEntity<>(paymentDetailsResponseDto, HttpStatus.OK);
 	}
 
 	@GetMapping("/getPaymentDetailsById/{userId}")
 	ResponseEntity<GetPaymentDetailResponseDto> getPaymentDetails(@PathVariable("userId") Long userId) {
-		
-		if(userId<=0) {
+
+		if (userId <= 0) {
 			throw new InvalidInputException("Invalid Input.");
 		}
-		
+
 		GetPaymentDetailResponseDto paymentDetailResponse = mortgageService.getPaymentDetailsById(userId);
 		return new ResponseEntity<>(paymentDetailResponse, HttpStatus.OK);
 	}
 
 	// clear all cache using cache manager
-    @RequestMapping(value = "/clearCache")
-    public void clearCache(){
-        for(String name:cacheManager.getCacheNames()){
-        	System.out.println(cacheManager.getCache(name));
-            cacheManager.getCache(name).clear();            // clear cache by name
-        }
-    }
+	@RequestMapping(value = "/clearCache")
+	public void clearCache() {
+		for (String name : cacheManager.getCacheNames()) {
+			System.out.println(cacheManager.getCache(name));
+			cacheManager.getCache(name).clear(); // clear cache by name
+		}
+	}
 
 }

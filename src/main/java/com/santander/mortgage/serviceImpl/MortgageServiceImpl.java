@@ -59,7 +59,7 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Autowired
 	private ValuationRepository valuationRespository;
-	
+
 	@Autowired
 	private ServiceClient serviceClient;
 
@@ -184,11 +184,18 @@ public class MortgageServiceImpl implements MortgageService {
 	}
 
 	@Override
-	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token) {
-		//ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(),"");
-		
-		ResponseEntity<UserRegistration> user=serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
-		
+	public PaymentDetailsResponseDto savePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto,
+			String token) {
+		// ResponseEntity<UserRegistration> user =
+		// registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(),"");
+
+		ResponseEntity<UserRegistration> user = serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(),
+				token);
+
+		if (user == null) {
+			throw new UserNotFoundException("User details not found");
+		}
+
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		PaymentDetails payment = new PaymentDetails();
 		if (paymentDetailsResponse != null) {
@@ -224,7 +231,7 @@ public class MortgageServiceImpl implements MortgageService {
 		getPaymentDetailResponseDto.setCurrentcircumstances(paymentDetails.getCurrentcircumstances());
 		getPaymentDetailResponseDto.setDayOfPayment(paymentDetails.getDayOfPayment());
 		getPaymentDetailResponseDto.setSortCode(paymentDetails.getSortCode());
-		
+
 		return getPaymentDetailResponseDto;
 
 	}
@@ -273,11 +280,19 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Override
 	@CacheEvict(value = "mortgagePaymentCache", allEntries = true)
-	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto, String token) {
-	//	ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
-		
-		ResponseEntity<UserRegistration> user=serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(), token);
-		
+	public PaymentDetailsResponseDto updatePaymentDetails(PaymentDetailsRequestDto paymentDetailsRequestDto,
+			String token) {
+		ResponseEntity<UserRegistration> user = registrationProxy.getUserDetails(paymentDetailsRequestDto.getUserId(),
+				token);
+
+		// ResponseEntity<UserRegistration>
+		// user=serviceClient.getUserDetails(paymentDetailsRequestDto.getUserId(),
+		// token);
+
+		if (user == null) {
+			throw new UserNotFoundException("User details not found");
+		}
+
 		PaymentDetails paymentDetailsResponse = paymentDetailsRepository.findByUserId(user.getBody().getUserId());
 		if (paymentDetailsResponse == null) {
 			throw new PaymentDetailsNotFoundException("Payment details not found");
@@ -295,7 +310,5 @@ public class MortgageServiceImpl implements MortgageService {
 
 		return paymentDetailsResponseDto;
 	}
-	
-	
 
 }

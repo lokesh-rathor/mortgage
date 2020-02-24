@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.santander.mortgage.dto.UserRegistration;
 
-@FeignClient(name="zuul-api-gateway-server")
+@FeignClient(name="zuul-api-gateway-server", fallback = UserClientFallback.class)
 @RibbonClient(name="zuul-api-gateway-server")  
 public interface RegistrationProxy {
 	
@@ -17,6 +17,6 @@ public interface RegistrationProxy {
 	public String sayHello();
 	
 	@GetMapping("/user-registration-service/users/details/{userId}")
-	public ResponseEntity<UserRegistration> getUserDetails(@PathVariable("userId") Long userId, @RequestHeader("X-Auth-Token") String token);
+	public ResponseEntity<UserRegistration> getUserDetails(@PathVariable("userId") Long userId, @RequestHeader("Authorization") String token);
 
 }
